@@ -1,0 +1,89 @@
+
+body {
+    background-image: url('/images/fondo.jpeg');
+    background-size: cover;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    color: #4D4D4D;
+}
+
+h1 {
+    text-align: center;
+    color: #FF6B35;
+    text-shadow: 2px 2px 2px #FFD9C2;
+    animation: bounce 2s infinite;
+    
+}
+
+
+
+form {
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: rgba(255, 236, 219, 0.8);
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+   
+}
+#mover {
+   
+    transform: translate(0%, 50%);
+  }
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 90%;
+    padding: 10px;
+    border: 2px solid #FF9D76;
+    border-radius: 10px;
+    font-size: 16px;
+    background-color: rgba(255, 242, 230, 0.8);
+    color: #4D4D4D;
+    margin-bottom: 10px;
+}
+
+input[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #FF6B35;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: #FF8C66;
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+select {
+    width: 90%;
+    padding: 10px;
+    border: 2px solid #FF9D76;
+    border-radius: 10px;
+    font-size: 16px;
+    background-color: rgba(255, 242, 230, 0.8);
+    color: #4D4D4D;
+    margin-bottom: 10px;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
