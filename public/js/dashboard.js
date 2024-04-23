@@ -67,8 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function updateContent() {
     const mediaContainer = document.querySelector('.content');
-    mediaContainer.innerHTML = '';  
+    mediaContainer.innerHTML = '';
 
+    // Crea el elemento adecuado basado en el tipo de contenido
     if (questions[currentQuestion].type === 'image') {
         const img = document.createElement('img');
         img.src = questions[currentQuestion].src;
@@ -83,13 +84,22 @@ function updateContent() {
     } else if (questions[currentQuestion].type === 'text') {
         const textDiv = document.createElement('div');
         textDiv.textContent = questions[currentQuestion].content;
-        textDiv.className = 'text-content'; 
+        textDiv.className = 'text-content';
         mediaContainer.appendChild(textDiv);
     }
 
-    const questionElement = document.querySelector('.question');
-    questionElement.textContent = questions[currentQuestion].question;
+    // Función para obtener una pregunta aleatoria del servidor y actualizar el DOM
+    fetch('/random-question')
+        .then(response => response.json())
+        .then(data => {
+            const questionElement = document.querySelector('.question');
+            questionElement.textContent = data.pregunta; // Actualiza la pregunta con la respuesta del servidor
+        })
+        .catch(error => {
+            console.error('Error al obtener la pregunta:', error);
+        });
 }
+
 
 
 function updateProgressBar() {

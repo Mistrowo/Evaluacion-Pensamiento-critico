@@ -34,6 +34,7 @@ router.get('/dashboard', isAuthenticated, (req, res) => {
 
 
 
+
 router.post('/login', (req, res) => {
   const { usuario, contrasena, establecimiento } = req.body;
   const query = 'SELECT * FROM usuarios WHERE nombre = ? AND contraseña = ? AND establecimiento = ?';
@@ -124,6 +125,21 @@ router.delete('/eliminar-pregunta/:id', isAuthenticated, (req, res) => {
   });
 });
 
+
+router.get('/random-question', (req, res) => {
+    const query = "SELECT pregunta FROM preguntas ORDER BY RAND() LIMIT 1";
+    connection.query(query, (error, results) => {
+        if (error) {
+            console.error('Error al consultar la base de datos:', error);
+            return res.status(500).json({ error: 'Error al obtener la pregunta' });
+        }
+        if (results.length > 0) {
+            res.json(results[0]); // Envía la pregunta como respuesta JSON
+        } else {
+            res.status(404).json({ error: 'No se encontraron preguntas' });
+        }
+    });
+});
 
 
 module.exports = router;
