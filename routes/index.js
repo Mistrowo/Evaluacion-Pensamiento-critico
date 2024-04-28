@@ -13,7 +13,6 @@ const isAuthenticated = (req, res, next) => {
 };
 
 
-// Ruta principal que renderiza la vista index.ejs
 router.get('/', (req, res) => {
   connection.query('SELECT DISTINCT establecimiento FROM usuarios', (error, results) => {
     if (error) {
@@ -24,14 +23,12 @@ router.get('/', (req, res) => {
   });
 });
 
-
-
 router.get('/dashboard', isAuthenticated, (req, res) => {
-  const usuario = req.session.usuario;
+  console.log(req.session.usuario);  
+  const usuario = req.session.usuario.nombre;
   const fecha = new Date().toLocaleDateString();
   res.render('dashboard', { usuario, fecha });
 });
-
 
 
 
@@ -45,10 +42,9 @@ router.post('/login', (req, res) => {
     }
     if (results.length > 0) {
       const user = results[0];
-      req.session.usuario = user.nombre; // Almacena el nombre de usuario en la sesión
-      req.session.rol = user.rol; // Almacena el rol en la sesión
+      req.session.usuario = user; 
+      req.session.rol = user.rol; 
 
-      // Redirecciona según el rol
       if (user.rol === 'Profesora' || user.rol === 'Profesor') {
         res.redirect('/dashboardadmin');
       } else {
@@ -63,22 +59,23 @@ router.post('/login', (req, res) => {
 
 
 
+
+
 router.get('/logout', (req, res) => {
   req.session.destroy(() => {
     res.redirect('/');
   });
 });
-
-
-
-router.get('/dashboardadmin', isAuthenticated, (req, res) => {
-  const usuario = req.session.usuario;
+router.get('/dashboard', isAuthenticated, (req, res) => {
+  const usuario = req.session.usuario.nombre; 
   const fecha = new Date().toLocaleDateString();
-  res.render('dashboardadmin', { usuario, fecha }); // Asegúrate de tener una vista dashboardadmin.ejs
+  res.render('dashboard', { usuario: usuario, fecha: fecha }); 
 });
 
+
+
 router.get('/obtener-usuarios', isAuthenticated, (req, res) => {
-  const query = 'SELECT id, nombre, contraseña, rol FROM usuarios'; // Ajusta esta consulta según tus necesidades y estructura de base de datos
+  const query = 'SELECT id, nombre, contraseña, rol FROM usuarios';
   connection.query(query, (error, results) => {
     if (error) {
       console.error('Error al consultar la base de datos:', error);
@@ -88,22 +85,21 @@ router.get('/obtener-usuarios', isAuthenticated, (req, res) => {
   });
 });
 
-// Ruta para eliminar un usuario
 router.delete('/eliminar-usuario/:id', isAuthenticated, (req, res) => {
-  const { id } = req.params; // Obtenemos el ID del usuario desde el parámetro de la URL
+  const { id } = req.params; 
   const query = 'DELETE FROM usuarios WHERE id = ?';
   connection.query(query, [id], (error, result) => {
       if (error) {
           console.error('Error al eliminar el usuario:', error);
           return res.status(500).json({ error: 'Error interno del servidor' });
       }
-      res.status(204).send(); // No content to send back
+      res.status(204).send(); 
   });
 });
 
 
 router.get('/obtener-preguntas', isAuthenticated, (req, res) => {
-  const query = 'SELECT id, habilidad, pregunta FROM preguntas'; // Asegúrate de que los campos coincidan con los de tu base de datos
+  const query = 'SELECT id, habilidad, pregunta FROM preguntas'; 
   connection.query(query, (error, results) => {
       if (error) {
           console.error('Error al consultar la base de datos:', error);
@@ -134,12 +130,25 @@ router.get('/random-question', (req, res) => {
             return res.status(500).json({ error: 'Error al obtener la pregunta' });
         }
         if (results.length > 0) {
-            res.json(results[0]); // Envía la pregunta como respuesta JSON
+            res.json(results[0]); 
         } else {
             res.status(404).json({ error: 'No se encontraron preguntas' });
         }
     });
 });
+router.post('/save-response', isAuthenticated, (req, res) => {
+  const response = req.body.response;
+  const userId = req.session.usuario.id;
 
+  console.log('Datos recibidos:', req.body);
 
+  const query = 'INSERT INTO respuestas (id_usuario, respuesta, fecha_respuesta) VALUES (?, ?, NOW())';
+  connection.query(query, [userId, response], (error, results) => {
+      if (error) {
+          console.error('Error al guardar la respuesta en la base de datos:', error);
+          return res.status(500).json({ success: false, message: 'Error al guardar la respuesta' });
+      }
+      res.json({ success: true, message: 'Respuesta guardada con éxito.' });
+  });
+});
 module.exports = router;
