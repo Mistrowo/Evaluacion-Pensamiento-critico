@@ -32,6 +32,14 @@ router.get('/dashboard', isAuthenticated, (req, res) => {
 
 
 
+router.get('/dashboardadmin', isAuthenticated, (req, res) => {
+  console.log(req.session.usuario);  
+  const usuario = req.session.usuario.nombre;
+  const fecha = new Date().toLocaleDateString();
+  res.render('dashboardadmin', { usuario, fecha });
+});
+
+
 router.post('/login', (req, res) => {
   const { usuario, contrasena, establecimiento } = req.body;
   const query = 'SELECT * FROM usuarios WHERE nombre = ? AND contraseña = ? AND establecimiento = ?';
@@ -42,13 +50,14 @@ router.post('/login', (req, res) => {
     }
     if (results.length > 0) {
       const user = results[0];
-      req.session.usuario = user; 
-      req.session.rol = user.rol; 
+      req.session.usuario = user;
+      req.session.rol = user.rol;
 
       if (user.rol === 'Profesora' || user.rol === 'Profesor') {
         res.redirect('/dashboardadmin');
       } else {
-        res.redirect('/dashboard');
+        // Cambiar la redireccion aquí
+        res.redirect('/instructivo');
       }
     } else {
       res.redirect('/');
@@ -56,8 +65,11 @@ router.post('/login', (req, res) => {
   });
 });
 
-
-
+router.get('/instructivo', isAuthenticated, (req, res) => {
+  const usuario = req.session.usuario.nombre;
+  const fecha = new Date().toLocaleDateString();
+  res.render('instructivo', { usuario, fecha });
+});
 
 
 

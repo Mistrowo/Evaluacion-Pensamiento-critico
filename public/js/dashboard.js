@@ -91,7 +91,11 @@ function updateProgressBar() {
 function submitResponse() {
     const form = document.getElementById('responseForm');
     const responseInput = form.querySelector('textarea[name="response"]');
-    const response = responseInput.value;
+    const response = responseInput.value.trim(); 
+
+    if (response === '') { 
+        return; 
+    }
 
     const params = new URLSearchParams();
     params.append('response', response);
@@ -108,7 +112,8 @@ function submitResponse() {
     .then(response => response.json())
     .then(data => {
         console.log('Respuesta del servidor:', data);
-        nextQuestion();
+        // Aquí puedes realizar cualquier acción adicional después de enviar la respuesta
+        nextQuestion(); // Avanzar a la siguiente pregunta
     })
     .catch(error => {
         console.error('Error al guardar la respuesta:', error);
@@ -116,19 +121,26 @@ function submitResponse() {
 }
 
 function nextQuestion() {
+    const responseInput = document.querySelector('textarea[name="response"]');
+    const response = responseInput.value.trim(); 
+
+    if (response === '') {
+        alert("Por favor, ingresa una respuesta antes de avanzar."); 
+        return; 
+    }
+
     if (currentQuestion < activities[currentActivity].questions.length - 1) {
         currentQuestion++;
     } else if (currentActivity < activities.length - 1) {
         currentActivity++;
-        currentQuestion = 0; 
+        currentQuestion = 0;
     } else {
         alert("¡Felicidades! Has completado todas las actividades.");
-        resetActivities(); 
+        resetActivities();
     }
     updateContent();
     updateProgressBar();
 }
-
 function previousQuestion() {
     if (currentQuestion > 0) {
         currentQuestion--;

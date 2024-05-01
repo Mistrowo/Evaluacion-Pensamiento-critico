@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Instructivo</title>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/css/instructivo.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico|Roboto&display=swap">
+</head>
+<body>
+    <div id="bubbles-container"></div>
+    <div class="leaf" style="top: 10%; left: 20%;"></div>
+    <div class="leaf" style="top: 30%; left: 70%;"></div>
+    <div class="leaf" style="top: 60%; left: 40%;"></div>
+
+    <div class="user-info">
+        Usuario: <%= usuario %><br>
+        Fecha: <%= fecha %>
+        <button class="logout-btn" id="logoutBtn">Cerrar sesión</button>
+    </div>
+
+    <div class="card">
+        <div class="content">
+            <h1 class="title">Bienvenido al Instructivo</h1>
+            <p class="subtitle">¡Prepárate para responder las preguntas!</p>
+
+            <div class="instructions">
+                <div class="instruction">
+                    <h3>1. Explorar el contenido</h3>
+                    <p>En esta actividad, se te presentarán imágenes, videos y textos. Tu tarea es analizar cada uno de ellos y responder las preguntas relacionadas.</p>
+                </div>
+                <div class="instruction">
+                    <h3>2. Responder las preguntas</h3>
+                    <p>Para cada contenido, se te mostrarán preguntas enfocadas en diferentes habilidades de pensamiento crítico, como interpretación, análisis, inferencia, evaluación y metacognición. Responde a cada pregunta con sinceridad y profundidad.</p>
+                </div>
+                <div class="instruction">
+                    <h3>3. Avanzar y completar</h3>
+                    <p>Puedes avanzar a la siguiente pregunta o contenido utilizando los botones correspondientes. Al finalizar todas las actividades, se te notificará. ¡Da lo mejor de ti y disfruta del proceso de aprendizaje!</p>
+                </div>
+            </div>
+
+            <a href="/dashboard" class="comenzar-btn">
+                <span class="btn-content">Comenzar</span>
+                <div class="btn-bg"></div>
+            </a>
+
+            <p class="motivation-quote">"El aprendizaje nunca termina, es una aventura de por vida."</p>
+        </div>
+    </div>
+
+    <script src="/js/instructivo.js"></script>
+    <script>
+        // Animación de burbujas de fondo
+        function createBubble() {
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+            bubble.style.left = `${Math.random() * 100}vw`;
+            bubble.style.animationDuration = `${Math.random() * 3 + 2}s`;
+            bubble.style.animationDelay = `${Math.random() * 5}s`;
+            document.getElementById('bubbles-container').appendChild(bubble);
+
+            setTimeout(() => {
+                bubble.remove();
+            }, 8000);
+        }
+
+        setInterval(createBubble, 300);
+    </script>
+</body>
+</html>
