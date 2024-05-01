@@ -1,6 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const connection = require('../base');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' }); // Directorio temporal para los archivos cargados
+
+const XLSX = require('xlsx');
+const fs = require('fs');
+
+
 
 
 
@@ -162,5 +169,87 @@ router.post('/save-response', isAuthenticated, (req, res) => {
       }
       res.json({ success: true, message: 'Respuesta guardada con éxito.' });
   });
+});
+
+
+router.post('/agregar-usuario', isAuthenticated, (req, res) => {
+  const { nombre, contrasena, establecimiento, rol } = req.body;
+  const query = 'INSERT INTO usuarios (nombre, contraseña, establecimiento, rol) VALUES (?, ?, ?, ?)';
+  connection.query(query, [nombre, contrasena, establecimiento, rol], (error, result) => {
+    if (error) {
+      console.error('Error al agregar el usuario:', error);
+      return res.status(500).json({ error: 'Error interno del servidor' });
+    }
+    res.status(200).json({ message: 'Usuario agregado correctamente' });
+  });
+});
+
+router.post('/agregar-pregunta', isAuthenticated, (req, res) => {
+  const { habilidad, pregunta } = req.body;
+  const query = 'INSERT INTO preguntas (habilidad, pregunta) VALUES (?, ?)';
+  connection.query(query, [habilidad, pregunta], (error, result) => {
+    if (error) {
+      console.error('Error al agregar la pregunta:', error);
+      return res.status(500).json({ error: 'Error interno del servidor' });
+    }
+    res.status(200).json({ message: 'Pregunta agregada correctamente' });
+  });
+});
+// Ruta para actualizar un usuario
+router.put('/actualizar-usuario/:id', isAuthenticated, (req, res) => {
+  const { id } = req.params;
+  const { nombre, contrasena, rol } = req.body;
+  const query = 'UPDATE usuarios SET nombre = ?, contraseña = ?, rol = ? WHERE id = ?';
+  connection.query(query, [nombre, contrasena, rol, id], (error, result) => {
+    if (error) {
+      console.error('Error al actualizar el usuario:', error);
+      return res.status(500).json({ error: 'Error interno del servidor' });
+    }
+    res.status(200).json({ message: 'Usuario actualizado correctamente' });
+  });
+});
+
+// Ruta para actualizar una pregunta
+router.put('/actualizar-pregunta/:id', isAuthenticated, (req, res) => {
+  const { id } = req.params;
+  const { habilidad, pregunta } = req.body;
+  const query = 'UPDATE preguntas SET habilidad = ?, pregunta = ? WHERE id = ?';
+  connection.query(query, [habilidad, pregunta, id], (error, result) => {
+    if (error) {
+      console.error('Error al actualizar la pregunta:', error);
+      return res.status(500).json({ error: 'Error interno del servidor' });
+    }
+    res.status(200).json({ message: 'Pregunta actualizada correctamente' });
+  });
+});
+router.post('/cargar-usuarios-multiple', isAuthenticated, upload.single('archivoUsuarios'), (req, res) => {
+  const archivo = req.file;
+
+  if (archivo) {
+    const fileBuffer = fs.readFileSync(archivo.path);
+    const workbook = XLSX.read(fileBuffer, { type: 'buffer' });
+    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    const data = XLSX.utils.sheet_to_json(worksheet);
+
+    // Aquí debes implementar la lógica para agregar los usuarios a la base de datos
+    data.forEach(row => {
+      const nombre = row.Nombre;
+      const contrasena = row.Contraseña;
+      const establecimiento = row.Establecimiento;
+      const rol = row.Rol;
+
+      // Insertar el usuario en la base de datos
+      const query = 'INSERT INTO usuarios (nombre, contraseña, establecimiento, rol) VALUES (?, ?, ?, ?)';
+      connection.query(query, [nombre, contrasena, establecimiento, rol], (error, result) => {
+        if (error) {
+          console.error('Error al agregar el usuario:', error);
+        }
+      });
+    });
+
+    res.status(200).json({ message: 'Usuarios agregados correctamente' });
+  } else {
+    res.status(400).json({ error: 'No se seleccionó ningún archivo' });
+  }
 });
 module.exports = router;

@@ -36,6 +36,8 @@
         <div class="buttons-container">
            
             <button class="custom-btn btn-green" data-bs-toggle="modal" data-bs-target="#modalAnalisisRespuestas">Análisis de Respuestas</button>
+            <button class="custom-btn btn-orange" data-bs-toggle="modal" data-bs-target="#modalAgregarMultiplesUsuarios">Agregar Múltiples Usuarios</button>
+
         </div>
         
     </div>
@@ -264,6 +266,101 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Actualizar Usuario -->
+<div class="modal fade" id="modalActualizarUsuario" tabindex="-1" aria-labelledby="modalActualizarUsuarioLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalActualizarUsuarioLabel">Actualizar Usuario</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formActualizarUsuario">
+            <input type="hidden" id="idUsuarioActualizar">
+            <div class="mb-3">
+              <label for="nombreUsuarioActualizar" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="nombreUsuarioActualizar" required>
+            </div>
+            <div class="mb-3">
+              <label for="contrasenaUsuarioActualizar" class="form-label">Contraseña</label>
+              <input type="password" class="form-control" id="contrasenaUsuarioActualizar" required>
+            </div>
+            <div class="mb-3">
+              <label for="rolUsuarioActualizar" class="form-label">Rol</label>
+              <select class="form-select" id="rolUsuarioActualizar" required>
+                <option value="">Selecciona un rol</option>
+                <option value="Profesora">Profesora</option>
+                <option value="Profesor">Profesor</option>
+                <option value="Estudiante">Estudiante</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="actualizarUsuario()">Actualizar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal Actualizar Pregunta -->
+<div class="modal fade" id="modalActualizarPregunta" tabindex="-1" aria-labelledby="modalActualizarPreguntaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalActualizarPreguntaLabel">Actualizar Pregunta</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formActualizarPregunta">
+            <input type="hidden" id="idPreguntaActualizar">
+            <div class="mb-3">
+              <label for="habilidadPreguntaActualizar" class="form-label">Habilidad</label>
+              <select class="form-select" id="habilidadPreguntaActualizar" required>
+                <option value="">Seleccione una habilidad</option>
+                <option value="Análisis">Análisis</option>
+                <option value="Inferencia">Inferencia</option>
+                <option value="Evaluación">Evaluación</option>
+                <option value="Metacognición">Metacognición</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="textoPreguntaActualizar" class="form-label">Pregunta</label>
+              <input type="text" class="form-control" id="textoPreguntaActualizar" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="actualizarPregunta()">Actualizar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal Agregar Múltiples Usuarios -->
+<div class="modal fade" id="modalAgregarMultiplesUsuarios" tabindex="-1" aria-labelledby="modalAgregarMultiplesUsuariosLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalAgregarMultiplesUsuariosLabel">Agregar Múltiples Usuarios</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formAgregarMultiplesUsuarios">
+            <div class="mb-3">
+              <label for="archivoUsuarios" class="form-label">Selecciona un archivo (Excel o PDF)</label>
+              <input type="file" class="form-control" id="archivoUsuarios" accept=".xlsx,.xls,.pdf" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="agregarMultiplesUsuarios()">Cargar usuarios</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
