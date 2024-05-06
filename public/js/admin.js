@@ -8,14 +8,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Inicialización y muestra del modal de bienvenida
     
 });
 
 
 $('#modalActualizar').on('show.bs.modal', function () {
     $.ajax({
-        url: '/obtener-usuarios', // Asegúrate de tener esta ruta configurada en tu backend
+        url: '/obtener-usuarios', 
         type: 'GET',
         success: function(data) {
             var rows = '';
@@ -39,7 +38,7 @@ $('#modalActualizar').on('show.bs.modal', function () {
 
 $('#modalEliminar').on('show.bs.modal', function () {
     $.ajax({
-        url: '/obtener-usuarios', // Utiliza la misma ruta que para obtener usuarios
+        url: '/obtener-usuarios', 
         type: 'GET',
         success: function(data) {
             var rows = '';
@@ -66,8 +65,8 @@ $(document).on('click', '.delete-user', function() {
             type: 'DELETE',
             success: function() {
                 alert('Usuario eliminado correctamente');
-                $('#modalEliminar').modal('hide'); // Ocultar el modal
-                location.reload(); // Recargar la página para actualizar la lista de usuarios
+                $('#modalEliminar').modal('hide');
+                location.reload(); 
             },
             error: function(error) {
                 alert('Error al eliminar el usuario');
@@ -103,7 +102,7 @@ $('#modalActualizarPreguntas').on('show.bs.modal', function () {
 
 $('#modalEliminarPreguntas').on('show.bs.modal', function () {
     $.ajax({
-        url: '/obtener-preguntas', // Asegúrate de tener esta ruta configurada para devolver todas las preguntas
+        url: '/obtener-preguntas', 
         type: 'GET',
         success: function(data) {
             var rows = '';
@@ -126,12 +125,12 @@ $('#modalEliminarPreguntas').on('show.bs.modal', function () {
 function eliminarPregunta(id) {
     if (confirm('¿Estás seguro de que quieres eliminar esta pregunta?')) {
         $.ajax({
-            url: `/eliminar-pregunta/${id}`, // Asegúrate de tener esta ruta configurada para eliminar la pregunta
+            url: `/eliminar-pregunta/${id}`, 
             type: 'DELETE',
             success: function() {
                 alert('Pregunta eliminada correctamente');
                 $('#modalEliminarPreguntas').modal('hide');
-                location.reload(); // Recargar la página para actualizar la lista
+                location.reload(); 
             },
             error: function(error) {
                 alert('Error al eliminar la pregunta');
@@ -140,8 +139,7 @@ function eliminarPregunta(id) {
         });
     }
 }
-// Función para agregar un nuevo usuario
-// Función para agregar un nuevo usuario
+
 function agregarUsuario() {
     const nombre = $('#nombreUsuario').val();
     const contrasena = $('#contrasenaUsuario').val();
@@ -155,22 +153,21 @@ function agregarUsuario() {
         data: { nombre, contrasena, establecimiento, rol },
         success: function(response) {
           console.log(response.message);
-          alert('Usuario agregado correctamente'); // Mostrar alerta
-          $('#agregarUsuarioForm')[0].reset(); // Limpiar el formulario
-          $('#modalAgregar').modal('hide'); // Cerrar el modal
+          alert('Usuario agregado correctamente'); 
+          $('#agregarUsuarioForm')[0].reset(); 
+          $('#modalAgregar').modal('hide'); 
         },
         error: function(error) {
           console.log('Error al agregar el usuario:', error);
-          alert('Error al agregar el usuario'); // Mostrar alerta de error
+          alert('Error al agregar el usuario'); 
         }
       });
     } else {
       console.log('Campos incompletos');
-      alert('Por favor, complete todos los campos'); // Mostrar alerta de campos incompletos
+      alert('Por favor, complete todos los campos'); 
     }
   }
   
-  // Función para agregar una nueva pregunta
   function agregarPregunta() {
     const habilidad = $('#habilidadPregunta').val();
     const pregunta = $('#textoPregunta').val();
@@ -182,21 +179,20 @@ function agregarUsuario() {
         data: { habilidad, pregunta },
         success: function(response) {
           console.log(response.message);
-          alert('Pregunta agregada correctamente'); // Mostrar alerta
-          $('#formAgregarPregunta')[0].reset(); // Limpiar el formulario
-          $('#modalAgregarPreguntas').modal('hide'); // Cerrar el modal
+          alert('Pregunta agregada correctamente'); 
+          $('#formAgregarPregunta')[0].reset(); 
+          $('#modalAgregarPreguntas').modal('hide'); 
         },
         error: function(error) {
           console.log('Error al agregar la pregunta:', error);
-          alert('Error al agregar la pregunta'); // Mostrar alerta de error
+          alert('Error al agregar la pregunta'); 
         }
       });
     } else {
       console.log('Campos incompletos');
-      alert('Por favor, complete todos los campos'); // Mostrar alerta de campos incompletos
+      alert('Por favor, complete todos los campos'); 
     }
   }
-  // Función para actualizar un usuario
 function actualizarUsuario(userId) {
     const nombre = prompt('Ingresa el nuevo nombre');
     const contrasena = prompt('Ingresa la nueva contraseña');
@@ -209,7 +205,6 @@ function actualizarUsuario(userId) {
         data: { nombre, contrasena, rol },
         success: function(response) {
           console.log(response.message);
-          // Actualizar la tabla de usuarios después de la actualización
           cargarUsuarios();
         },
         error: function(error) {
@@ -220,7 +215,6 @@ function actualizarUsuario(userId) {
       console.log('Campos incompletos');
     }
   }
-  // Función para actualizar una pregunta
 function actualizarPregunta(preguntaId) {
     const habilidad = prompt('Ingresa la nueva habilidad');
     const pregunta = prompt('Ingresa la nueva pregunta');
@@ -232,7 +226,6 @@ function actualizarPregunta(preguntaId) {
         data: { habilidad, pregunta },
         success: function(response) {
           console.log(response.message);
-          // Actualizar la tabla de preguntas después de la actualización
           cargarPreguntas();
         },
         error: function(error) {
@@ -243,7 +236,6 @@ function actualizarPregunta(preguntaId) {
       console.log('Campos incompletos');
     }
   }
-  // Función para cargar los usuarios en la tabla
 function cargarUsuarios() {
     $.ajax({
       url: '/obtener-usuarios',
@@ -270,7 +262,6 @@ function cargarUsuarios() {
     });
   }
   
-  // Función para cargar las preguntas en la tabla
   function cargarPreguntas() {
     $.ajax({
       url: '/obtener-preguntas',
@@ -307,7 +298,6 @@ function cargarUsuarios() {
     $('#habilidadPreguntaActualizar').val(habilidad);
     $('#textoPreguntaActualizar').val(pregunta);
   }
-  // Función para actualizar un usuario
 function actualizarUsuario() {
     const id = $('#idUsuarioActualizar').val();
     const nombre = $('#nombreUsuarioActualizar').val();
@@ -321,8 +311,8 @@ function actualizarUsuario() {
         data: { nombre, contrasena, rol },
         success: function(response) {
           console.log(response.message);
-          $('#modalActualizarUsuario').modal('hide'); // Cerrar el modal
-          cargarUsuarios(); // Actualizar la tabla de usuarios
+          $('#modalActualizarUsuario').modal('hide'); 
+          cargarUsuarios();
         },
         error: function(error) {
           console.log('Error al actualizar el usuario:', error);
@@ -333,7 +323,6 @@ function actualizarUsuario() {
     }
   }
   
-  // Función para actualizar una pregunta
   function actualizarPregunta() {
     const id = $('#idPreguntaActualizar').val();
     const habilidad = $('#habilidadPreguntaActualizar').val();
@@ -346,8 +335,8 @@ function actualizarUsuario() {
         data: { habilidad, pregunta },
         success: function(response) {
           console.log(response.message);
-          $('#modalActualizarPregunta').modal('hide'); // Cerrar el modal
-          cargarPreguntas(); // Actualizar la tabla de preguntas
+          $('#modalActualizarPregunta').modal('hide'); 
+          cargarPreguntas(); 
         },
         error: function(error) {
           console.log('Error al actualizar la pregunta:', error);
@@ -378,7 +367,7 @@ function actualizarUsuario() {
           alert('Usuarios agregados correctamente');
           $('#formAgregarMultiplesUsuarios')[0].reset();
           $('#modalAgregarMultiplesUsuarios').modal('hide');
-          cargarUsuarios(); // Actualizar la tabla de usuarios
+          cargarUsuarios(); 
         },
         error: function(error) {
           console.log('Error al agregar los usuarios:', error);
@@ -389,3 +378,7 @@ function actualizarUsuario() {
       alert('Por favor, selecciona un archivo PDF o Excel');
     }
   }
+
+  document.querySelector('.btn-green[data-bs-target="#modalAnalisisRespuestas"]').addEventListener('click', () => {
+    window.location.href = '/analisis-respuestas';
+  });

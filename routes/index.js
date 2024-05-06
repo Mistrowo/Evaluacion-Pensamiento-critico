@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const connection = require('../base');
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' }); // Directorio temporal para los archivos cargados
+const upload = multer({ dest: 'uploads/' }); 
 
 const XLSX = require('xlsx');
 const fs = require('fs');
@@ -36,6 +36,34 @@ router.get('/dashboard', isAuthenticated, (req, res) => {
   const fecha = new Date().toLocaleDateString();
   res.render('dashboard', { usuario, fecha });
 });
+
+
+router.get('/analisis-respuestas', isAuthenticated, (req, res) => {
+  console.log(req.session.usuario);  
+  const usuario = req.session.usuario.nombre;
+  const fecha = new Date().toLocaleDateString();
+  res.render('analisis-respuestas', { usuario, fecha });
+});
+
+
+
+router.get('/obtener-respuestas', isAuthenticated, (req, res) => {
+  const query = `
+      SELECT r.id_respuesta, r.id_pregunta, r.respuesta, r.fecha_respuesta, r.id_respuesta_general, u.nombre 
+      FROM respuestas r 
+      JOIN usuarios u ON r.id_usuario = u.id 
+      WHERE r.id_respuesta_general IS NULL`;
+
+  connection.query(query, (error, results) => {
+      if (error) {
+          console.error('Error al consultar la base de datos:', error);
+          return res.status(500).json({ error: 'Error al obtener las respuestas' });
+      }
+      res.json(results);
+  });
+});
+
+
 
 
 
@@ -75,9 +103,9 @@ router.post('/login', (req, res) => {
 router.get('/instructivo', isAuthenticated, (req, res) => {
   const usuario = req.session.usuario.nombre;
   const fecha = new Date().toLocaleDateString();
+  req.session.currentResponseGroupId = null; // Inicializar currentResponseGroupId
   res.render('instructivo', { usuario, fecha });
 });
-
 
 
 router.get('/logout', (req, res) => {
@@ -157,18 +185,38 @@ router.get('/random-question', (req, res) => {
 });
 router.post('/save-response', isAuthenticated, (req, res) => {
   const response = req.body.response;
+  const questionId = req.body.question_id;
   const userId = req.session.usuario.id;
+  const pregunta = req.body.pregunta; // Obtener la pregunta desde el cuerpo de la solicitud
 
   console.log('Datos recibidos:', req.body);
 
-  const query = 'INSERT INTO respuestas (id_usuario, respuesta, fecha_respuesta) VALUES (?, ?, NOW())';
-  connection.query(query, [userId, response], (error, results) => {
+  if (req.session.currentResponseGroupId === null) {
+    // Es la primera respuesta de una nueva ronda
+    const query = 'INSERT INTO respuestas (id_usuario, id_pregunta, respuesta, pregunta, fecha_respuesta) VALUES (?, ?, ?, ?, NOW())';
+    connection.query(query, [userId, questionId, response, pregunta], (error, results) => {
       if (error) {
-          console.error('Error al guardar la respuesta en la base de datos:', error);
-          return res.status(500).json({ success: false, message: 'Error al guardar la respuesta' });
+        console.error('Error al guardar la respuesta en la base de datos:', error);
+        return res.status(500).json({ success: false, message: 'Error al guardar la respuesta' });
       }
+
+      // Obtenemos el id_respuesta generado automáticamente y lo asignamos a currentResponseGroupId en la sesión
+      req.session.currentResponseGroupId = results.insertId;
+
       res.json({ success: true, message: 'Respuesta guardada con éxito.' });
-  });
+    });
+  } else {
+    // No es la primera respuesta de la ronda, insertamos la respuesta con el id_respuesta_general
+    const query = 'INSERT INTO respuestas (id_usuario, id_pregunta, respuesta, pregunta, fecha_respuesta, id_respuesta_general) VALUES (?, ?, ?, ?, NOW(), ?)';
+    connection.query(query, [userId, questionId, response, pregunta, req.session.currentResponseGroupId], (error, results) => {
+      if (error) {
+        console.error('Error al guardar la respuesta en la base de datos:', error);
+        return res.status(500).json({ success: false, message: 'Error al guardar la respuesta' });
+      }
+
+      res.json({ success: true, message: 'Respuesta guardada con éxito.' });
+    });
+  }
 });
 
 
@@ -252,4 +300,21 @@ router.post('/cargar-usuarios-multiple', isAuthenticated, upload.single('archivo
     res.status(400).json({ error: 'No se seleccionó ningún archivo' });
   }
 });
+
+
+router.delete('/eliminar-respuesta/:id', isAuthenticated, (req, res) => {
+  const { id } = req.params;
+  const query = 'DELETE FROM respuestas WHERE id_respuesta = ?';
+
+  connection.query(query, [id], (error, result) => {
+      if (error) {
+          console.error('Error al eliminar la respuesta:', error);
+          return res.status(500).json({ error: 'Error interno del servidor' });
+      }
+      res.status(204).send();
+  });
+});
+
+
+
 module.exports = router;
