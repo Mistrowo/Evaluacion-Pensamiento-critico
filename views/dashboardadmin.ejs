@@ -1,356 +1,280 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Dashboard ADMIN</title>
-        <link rel="stylesheet" href="/css/admin.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-
-
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard ADMIN</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/flowbite@1.4.7/dist/flowbite.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
 <body>
     <div class="leaf" style="top: 10%; left: 20%;"></div>
     <div class="leaf" style="top: 30%; left: 70%;"></div>
     <div class="leaf" style="top: 60%; left: 40%;"></div>
     <div class="user-info">
-        Usuario: <%= usuario %><br>
-        Fecha: <%= fecha %>
+        <p>Usuario: <%= usuario %></p>
+        <p>Fecha: <%= fecha %></p>
         <button class="logout-btn" id="logoutBtn">Cerrar sesión</button>
     </div>
     
     <div class="buttons-container">
         <div class="button-row">
-            <button class="custom-btn btn-red" data-bs-toggle="modal" data-bs-target="#modalActualizar">Actualizar Usuarios</button>
-            <button class="custom-btn btn-blue" data-bs-toggle="modal" data-bs-target="#modalEliminar">Eliminar Usuarios</button>
-            <button class="custom-btn btn-yellow" data-bs-toggle="modal" data-bs-target="#modalAgregar">Agregar Usuarios</button>
-            
+            <button class="custom-btn btn-red" id="modalActualizarBtn">Actualizar Usuarios</button>
+            <button class="custom-btn btn-blue" id="modalEliminarBtn">Eliminar Usuarios</button>
+            <button class="custom-btn btn-yellow" id="modalAgregarUsuarioBtn">Agregar Usuarios</button>
         </div>
         <div class="button-row">
-            <button class="custom-btn btn-green" data-bs-toggle="modal" data-bs-target="#modalActualizarPreguntas">Actualizar Preguntas</button>
-            <button class="custom-btn btn-purple" data-bs-toggle="modal" data-bs-target="#modalEliminarPreguntas">Eliminar Preguntas</button>
-            <button class="custom-btn btn-orange" data-bs-toggle="modal" data-bs-target="#modalAgregarPreguntas">Agregar Preguntas</button>
+            <button class="custom-btn btn-green" id="modalActualizarPreguntasBtn">Actualizar Preguntas</button>
+            <button class="custom-btn btn-purple" id="modalEliminarPreguntasBtn">Eliminar Preguntas</button>
+            <button class="custom-btn btn-orange" id="modalAgregarPreguntasBtn">Agregar Preguntas</button>
         </div>
-
         <div class="button-row">
-           
-            <button class="custom-btn btn-green" data-bs-toggle="modal" data-bs-target="#modalAnalisisRespuestas">Análisis de Respuestas</button>
-            <button class="custom-btn btn-orange" data-bs-toggle="modal" data-bs-target="#modalAgregarMultiplesUsuarios">Agregar Múltiples Usuarios</button>
-
+            <button class="custom-btn btn-green" id="analisisRespuestasBtn">Análisis de Respuestas</button>
+            <button class="custom-btn btn-orange" id="modalAgregarMultiplesUsuariosBtn">Agregar Múltiples Usuarios</button>
         </div>
-        
     </div>
-    
-    
 
-    
-<!-- Modal Actualizar Usuarios -->
-<div class="modal fade" id="modalActualizar" tabindex="-1" aria-labelledby="modalActualizarLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg"> <!-- modal-lg para un modal más grande -->
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalActualizarLabel">Actualizar Usuarios</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Contraseña</th>
-                            <th>Rol</th>
-                            <th>Editar</th>
-                        </tr>
-                    </thead>
-                    <tbody id="usuariosTableBody">
-                        <!-- Los datos de los usuarios se cargarán aquí dinámicamente -->
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+    <!-- Modals -->
+    <div class="modal fade" id="modalActualizar" tabindex="-1" aria-labelledby="modalActualizarLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalActualizarLabel">Actualizar Usuarios</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nombre</th>
+                                <th>Contraseña</th>
+                                <th>Rol</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usuariosTableBody"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-
-<!-- Modal Eliminar Usuarios -->
-<div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalEliminarLabel">Eliminar Usuarios</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody id="deleteUsersTableBody">
-                        <!-- Los datos de los usuarios se cargarán aquí dinámicamente -->
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger">Eliminar</button>
+    <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEliminarLabel">Eliminar Usuarios</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="deleteUsersTableBody"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Modal Agregar Usuarios -->
-<div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="modalAgregarLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalAgregarLabel">Agregar Usuarios</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="agregarUsuarioForm">
-                    <div class="mb-3">
-                        <label for="nombreUsuario" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="nombreUsuario" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="contrasenaUsuario" class="form-label">Contraseña</label>
-                        <input type="password" class="form-control" id="contrasenaUsuario" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="establecimientoUsuario" class="form-label">Establecimiento</label>
-                        <input type="text" class="form-control" id="establecimientoUsuario" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="rolUsuario" class="form-label">Rol</label>
-                        <select class="form-select" id="rolUsuario" required>
-                            <option value="">Selecciona un rol</option>
-                            <option value="Profesora">Profesora</option>
-                            <option value="Profesor">Profesor</option>
-                            <option value="Estudiante">Estudiante</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-success" onclick="agregarUsuario()">Agregar</button>
+    <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="modalAgregarLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAgregarLabel">Agregar Usuarios</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="agregarUsuarioForm">
+                        <div class="mb-3">
+                            <label for="nombreUsuario" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombreUsuario">
+                        </div>
+                        <div class="mb-3">
+                            <label for="contrasenaUsuario" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="contrasenaUsuario">
+                        </div>
+                        <div class="mb-3">
+                            <label for="establecimientoUsuario" class="form-label">Establecimiento</label>
+                            <input type="text" class="form-control" id="establecimientoUsuario">
+                        </div>
+                        <div class="mb-3">
+                            <label for="rolUsuario" class="form-label">Rol</label>
+                            <select class="form-control" id="rolUsuario">
+                                <option value="1">Admin</option>
+                                <option value="2">Usuario</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="agregarUsuario()">Agregar</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Modal Actualizar Preguntas -->
-<!-- Modal Actualizar Preguntas -->
-<div class="modal fade" id="modalActualizarPreguntas" tabindex="-1" aria-labelledby="modalActualizarPreguntasLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalActualizarPreguntasLabel">Actualizar Preguntas</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Habilidad</th>
-                            <th>Pregunta</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="preguntasTableBody">
-                        <!-- Las preguntas se cargarán aquí dinámicamente -->
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-success">Actualizar</button>
+    <div class="modal fade" id="modalActualizarPreguntas" tabindex="-1" aria-labelledby="modalActualizarPreguntasLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalActualizarPreguntasLabel">Actualizar Preguntas</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Habilidad</th>
+                                <th>Pregunta</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="preguntasTableBody"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-
-
-
-<div class="modal fade" id="modalEliminarPreguntas" tabindex="-1" aria-labelledby="modalEliminarPreguntasLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalEliminarPreguntasLabel">Eliminar Preguntas</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Habilidad</th>
-                            <th>Pregunta</th>
-                            <th>Eliminar</th>
-                        </tr>
-                    </thead>
-                    <tbody id="eliminarPreguntasTableBody">
-                        <!-- Las preguntas se cargarán aquí dinámicamente -->
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger" onclick="eliminarSeleccionadas()">Eliminar Seleccionadas</button>
+    <div class="modal fade" id="modalEliminarPreguntas" tabindex="-1" aria-labelledby="modalEliminarPreguntasLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEliminarPreguntasLabel">Eliminar Preguntas</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Habilidad</th>
+                                <th>Pregunta</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="eliminarPreguntasTableBody"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-
-<!-- Modal Agregar Preguntas -->
-<div class="modal fade" id="modalAgregarPreguntas" tabindex="-1" aria-labelledby="modalAgregarPreguntasLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalAgregarPreguntasLabel">Agregar Preguntas</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="formAgregarPregunta">
-                    <div class="mb-3">
-                        <label for="habilidadPregunta" class="form-label">Habilidad</label>
-                        <select class="form-select" id="habilidadPregunta" required>
-                            <option value="">Seleccione una habilidad</option>
-                            <option value="Análisis">Análisis</option>
-                            <option value="Inferencia">Inferencia</option>
-                            <option value="Evaluación">Evaluación</option>
-                            <option value="Metacognición">Metacognición</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="textoPregunta" class="form-label">Pregunta</label>
-                        <input type="text" class="form-control" id="textoPregunta" required>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-warning" onclick="agregarPregunta()">Agregar</button>
+    <div class="modal fade" id="modalAgregarPreguntas" tabindex="-1" aria-labelledby="modalAgregarPreguntasLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAgregarPreguntasLabel">Agregar Preguntas</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formAgregarPregunta">
+                        <div class="mb-3">
+                            <label for="habilidadPregunta" class="form-label">Habilidad</label>
+                            <input type="text" class="form-control" id="habilidadPregunta">
+                        </div>
+                        <div class="mb-3">
+                            <label for="textoPregunta" class="form-label">Pregunta</label>
+                            <textarea class="form-control" id="textoPregunta"></textarea>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="agregarPregunta()">Agregar</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-
-<!-- Modal Análisis de Respuestas -->
-
-
-<!-- Modal Actualizar Usuario -->
-<div class="modal fade" id="modalActualizarUsuario" tabindex="-1" aria-labelledby="modalActualizarUsuarioLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalActualizarUsuarioLabel">Actualizar Usuario</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="formActualizarUsuario">
-            <input type="hidden" id="idUsuarioActualizar">
-            <div class="mb-3">
-              <label for="nombreUsuarioActualizar" class="form-label">Nombre</label>
-              <input type="text" class="form-control" id="nombreUsuarioActualizar" required>
+    <div class="modal fade" id="modalAgregarMultiplesUsuarios" tabindex="-1" aria-labelledby="modalAgregarMultiplesUsuariosLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAgregarMultiplesUsuariosLabel">Agregar Múltiples Usuarios</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formAgregarMultiplesUsuarios" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="archivoUsuarios" class="form-label">Seleccionar archivo</label>
+                            <input type="file" class="form-control" id="archivoUsuarios">
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="agregarMultiplesUsuarios()">Agregar</button>
+                    </form>
+                </div>
             </div>
-            <div class="mb-3">
-              <label for="contrasenaUsuarioActualizar" class="form-label">Contraseña</label>
-              <input type="password" class="form-control" id="contrasenaUsuarioActualizar" required>
-            </div>
-            <div class="mb-3">
-              <label for="rolUsuarioActualizar" class="form-label">Rol</label>
-              <select class="form-select" id="rolUsuarioActualizar" required>
-                <option value="">Selecciona un rol</option>
-                <option value="Profesora">Profesora</option>
-                <option value="Profesor">Profesor</option>
-                <option value="Estudiante">Estudiante</option>
-              </select>
-            </div>
-          </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" onclick="actualizarUsuario()">Actualizar</button>
-        </div>
-      </div>
     </div>
-  </div>
-  <!-- Modal Actualizar Pregunta -->
-<div class="modal fade" id="modalActualizarPregunta" tabindex="-1" aria-labelledby="modalActualizarPreguntaLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalActualizarPreguntaLabel">Actualizar Pregunta</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="formActualizarPregunta">
-            <input type="hidden" id="idPreguntaActualizar">
-            <div class="mb-3">
-              <label for="habilidadPreguntaActualizar" class="form-label">Habilidad</label>
-              <select class="form-select" id="habilidadPreguntaActualizar" required>
-                <option value="">Seleccione una habilidad</option>
-                <option value="Análisis">Análisis</option>
-                <option value="Inferencia">Inferencia</option>
-                <option value="Evaluación">Evaluación</option>
-                <option value="Metacognición">Metacognición</option>
-              </select>
+
+    <!-- Modal para Editar Usuario -->
+    <div class="modal fade" id="modalEditarUsuario" tabindex="-1" aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEditarUsuarioLabel">Editar Usuario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarUsuario">
+                        <input type="hidden" id="editUserId">
+                        <div class="mb-3">
+                            <label for="editUserNombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="editUserNombre">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editUserContrasena" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="editUserContrasena">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editUserRol" class="form-label">Rol</label>
+                            <select class="form-control" id="editUserRol">
+                                <option value="1">Admin</option>
+                                <option value="2">Usuario</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                    </form>
+                </div>
             </div>
-            <div class="mb-3">
-              <label for="textoPreguntaActualizar" class="form-label">Pregunta</label>
-              <input type="text" class="form-control" id="textoPreguntaActualizar" required>
-            </div>
-          </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" onclick="actualizarPregunta()">Actualizar</button>
-        </div>
-      </div>
     </div>
-  </div>
-  <!-- Modal Agregar Múltiples Usuarios -->
-<div class="modal fade" id="modalAgregarMultiplesUsuarios" tabindex="-1" aria-labelledby="modalAgregarMultiplesUsuariosLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalAgregarMultiplesUsuariosLabel">Agregar Múltiples Usuarios</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="formAgregarMultiplesUsuarios">
-            <div class="mb-3">
-              <label for="archivoUsuarios" class="form-label">Selecciona un archivo (Excel o PDF)</label>
-              <input type="file" class="form-control" id="archivoUsuarios" accept=".xlsx,.xls,.pdf" required>
+
+    <!-- Modal para Editar Pregunta -->
+    <div class="modal fade" id="modalEditarPregunta" tabindex="-1" aria-labelledby="modalEditarPreguntaLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEditarPreguntaLabel">Editar Pregunta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarPregunta">
+                        <input type="hidden" id="editPreguntaId">
+                        <div class="mb-3">
+                            <label for="editPreguntaHabilidad" class="form-label">Habilidad</label>
+                            <input type="text" class="form-control" id="editPreguntaHabilidad">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPreguntaTexto" class="form-label">Pregunta</label>
+                            <textarea class="form-control" id="editPreguntaTexto"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                    </form>
+                </div>
             </div>
-          </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" onclick="agregarMultiplesUsuarios()">Cargar usuarios</button>
-        </div>
-      </div>
     </div>
-  </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/admin.js"></script>
 </body>
 </html>

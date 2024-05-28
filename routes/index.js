@@ -21,14 +21,35 @@ const isAuthenticated = (req, res, next) => {
 
 
 router.get('/', (req, res) => {
-  connection.query('SELECT DISTINCT establecimiento FROM usuarios', (error, results) => {
-    if (error) {
-      console.error('Error al consultar la base de datos:', error);
-      return res.render('index', { establecimientos: [] });
+  connection.query(
+    `SELECT DISTINCT establecimiento, curso
+     FROM usuarios`,
+    (error, results) => {
+      if (error) {
+        console.error('Error al consultar la base de datos:', error);
+        return res.render('index', { establecimientos: [] });
+      }
+
+      // Agrupar los cursos por establecimiento
+      const establecimientos = {};
+      results.forEach(row => {
+        const { establecimiento, curso } = row;
+        if (!establecimientos[establecimiento]) {
+          establecimientos[establecimiento] = {
+            nombre: establecimiento,
+            cursos: []
+          };
+        }
+        if (curso) {
+          establecimientos[establecimiento].cursos.push(curso);
+        }
+      });
+
+      res.render('index', { establecimientos: Object.values(establecimientos) });
     }
-    res.render('index', { establecimientos: results });
-  });
+  );
 });
+
 
 router.get('/dashboard', isAuthenticated, (req, res) => {
   console.log(req.session.usuario);  
@@ -51,10 +72,27 @@ router.get('/obtener-respuestas', isAuthenticated, (req, res) => {
   const query = `
       SELECT r.id_respuesta, r.id_pregunta, r.respuesta, r.fecha_respuesta, r.id_respuesta_general, u.nombre 
       FROM respuestas r 
-      JOIN usuarios u ON r.id_usuario = u.id 
-      WHERE r.id_respuesta_general IS NULL`;
+      JOIN usuarios u ON r.id_usuario = u.id`;
 
   connection.query(query, (error, results) => {
+      if (error) {
+          console.error('Error al consultar la base de datos:', error);
+          return res.status(500).json({ error: 'Error al obtener las respuestas' });
+      }
+      res.json(results);
+  });
+});
+
+
+router.get('/obtener-respuestas-general/:idGeneral', isAuthenticated, (req, res) => {
+  const { idGeneral } = req.params;
+  const query = `
+      SELECT r.id_respuesta, r.id_pregunta, r.pregunta, r.respuesta, r.fecha_respuesta, r.id_respuesta_general, u.nombre 
+      FROM respuestas r 
+      JOIN usuarios u ON r.id_usuario = u.id 
+      WHERE r.id_respuesta_general = ? OR r.id_respuesta = ?`;
+
+  connection.query(query, [idGeneral, idGeneral], (error, results) => {
       if (error) {
           console.error('Error al consultar la base de datos:', error);
           return res.status(500).json({ error: 'Error al obtener las respuestas' });
@@ -76,29 +114,35 @@ router.get('/dashboardadmin', isAuthenticated, (req, res) => {
 
 
 router.post('/login', (req, res) => {
-  const { usuario, contrasena, establecimiento } = req.body;
-  const query = 'SELECT * FROM usuarios WHERE nombre = ? AND contraseña = ? AND establecimiento = ?';
-  connection.query(query, [usuario, contrasena, establecimiento], (error, results) => {
-    if (error) {
-      console.error('Error al consultar la base de datos:', error);
-      return res.redirect('/');
-    }
-    if (results.length > 0) {
-      const user = results[0];
-      req.session.usuario = user;
-      req.session.rol = user.rol;
+  const { usuario, contrasena, establecimiento, curso } = req.body;
+  console.log('Datos recibidos:', req.body); // Log para verificar los datos recibidos
 
-      if (user.rol === 'Profesora' || user.rol === 'Profesor') {
-        res.redirect('/dashboardadmin');
-      } else {
-        // Cambiar la redireccion aquí
-        res.redirect('/instructivo');
+  const query = 'SELECT * FROM usuarios WHERE nombre = ? AND contraseña = ? AND establecimiento = ? AND curso = ?';
+  connection.query(query, [usuario, contrasena, establecimiento, curso], (error, results) => {
+      if (error) {
+          console.error('Error al consultar la base de datos:', error);
+          return res.redirect('/');
       }
-    } else {
-      res.redirect('/');
-    }
+
+      console.log('Resultados de la consulta:', results); // Log para verificar los resultados de la consulta
+
+      if (results.length > 0) {
+          const user = results[0];
+          req.session.usuario = user;
+          req.session.rol = user.rol;
+
+          if (user.rol === 'Profesora' || user.rol === 'Profesor') {
+              res.redirect('/dashboardadmin');
+          } else {
+              // Cambiar la redireccion aquí
+              res.redirect('/instructivo');
+          }
+      } else {
+          res.redirect('/');
+      }
   });
 });
+
 
 router.get('/instructivo', isAuthenticated, (req, res) => {
   const usuario = req.session.usuario.nombre;
@@ -192,32 +236,41 @@ router.post('/save-response', isAuthenticated, (req, res) => {
   console.log('Datos recibidos:', req.body);
 
   if (req.session.currentResponseGroupId === null) {
-    // Es la primera respuesta de una nueva ronda
-    const query = 'INSERT INTO respuestas (id_usuario, id_pregunta, respuesta, pregunta, fecha_respuesta) VALUES (?, ?, ?, ?, NOW())';
-    connection.query(query, [userId, questionId, response, pregunta], (error, results) => {
-      if (error) {
-        console.error('Error al guardar la respuesta en la base de datos:', error);
-        return res.status(500).json({ success: false, message: 'Error al guardar la respuesta' });
-      }
+      // Guardar la primera respuesta y usar su id_respuesta como id_respuesta_general
+      const query = 'INSERT INTO respuestas (id_usuario, id_pregunta, respuesta, pregunta, fecha_respuesta) VALUES (?, ?, ?, ?, NOW())';
+      connection.query(query, [userId, questionId, response, pregunta], (error, results) => {
+          if (error) {
+              console.error('Error al guardar la respuesta en la base de datos:', error);
+              return res.status(500).json({ success: false, message: 'Error al guardar la respuesta' });
+          }
 
-      // Obtenemos el id_respuesta generado automáticamente y lo asignamos a currentResponseGroupId en la sesión
-      req.session.currentResponseGroupId = results.insertId;
+          const insertedId = results.insertId;
+          req.session.currentResponseGroupId = insertedId;
 
-      res.json({ success: true, message: 'Respuesta guardada con éxito.' });
-    });
+          // Actualizar el id_respuesta_general de la primera respuesta
+          const updateQuery = 'UPDATE respuestas SET id_respuesta_general = ? WHERE id_respuesta = ?';
+          connection.query(updateQuery, [insertedId, insertedId], (updateError) => {
+              if (updateError) {
+                  console.error('Error al actualizar el id_respuesta_general:', updateError);
+                  return res.status(500).json({ success: false, message: 'Error al actualizar el id_respuesta_general' });
+              }
+
+              res.json({ success: true, message: 'Respuesta guardada con éxito.' });
+          });
+      });
   } else {
-    // No es la primera respuesta de la ronda, insertamos la respuesta con el id_respuesta_general
-    const query = 'INSERT INTO respuestas (id_usuario, id_pregunta, respuesta, pregunta, fecha_respuesta, id_respuesta_general) VALUES (?, ?, ?, ?, NOW(), ?)';
-    connection.query(query, [userId, questionId, response, pregunta, req.session.currentResponseGroupId], (error, results) => {
-      if (error) {
-        console.error('Error al guardar la respuesta en la base de datos:', error);
-        return res.status(500).json({ success: false, message: 'Error al guardar la respuesta' });
-      }
+      const query = 'INSERT INTO respuestas (id_usuario, id_pregunta, respuesta, pregunta, fecha_respuesta, id_respuesta_general) VALUES (?, ?, ?, ?, NOW(), ?)';
+      connection.query(query, [userId, questionId, response, pregunta, req.session.currentResponseGroupId], (error, results) => {
+          if (error) {
+              console.error('Error al guardar la respuesta en la base de datos:', error);
+              return res.status(500).json({ success: false, message: 'Error al guardar la respuesta' });
+          }
 
-      res.json({ success: true, message: 'Respuesta guardada con éxito.' });
-    });
+          res.json({ success: true, message: 'Respuesta guardada con éxito.' });
+      });
   }
 });
+
 
 
 router.post('/agregar-usuario', isAuthenticated, (req, res) => {
@@ -302,18 +355,90 @@ router.post('/cargar-usuarios-multiple', isAuthenticated, upload.single('archivo
 });
 
 
-router.delete('/eliminar-respuesta/:id', isAuthenticated, (req, res) => {
-  const { id } = req.params;
-  const query = 'DELETE FROM respuestas WHERE id_respuesta = ?';
+router.delete('/eliminar-respuestas-general/:idGeneral', isAuthenticated, (req, res) => {
+  const { idGeneral } = req.params;
+  const query = 'DELETE FROM respuestas WHERE id_respuesta_general = ?';
 
-  connection.query(query, [id], (error, result) => {
+  connection.query(query, [idGeneral], (error, result) => {
       if (error) {
-          console.error('Error al eliminar la respuesta:', error);
+          console.error('Error al eliminar las respuestas:', error);
           return res.status(500).json({ error: 'Error interno del servidor' });
       }
       res.status(204).send();
   });
 });
+
+
+
+
+
+router.post('/chat-auto', async (req, res) => {
+  try {
+    // Seleccionar respuestas aleatorias de la base de datos
+    const query = `SELECT respuesta FROM respuestas ORDER BY RAND() LIMIT 10;`;
+
+    connection.query(query, async (error, results) => {
+      if (error) {
+        console.error('Error al consultar la base de datos:', error);
+        return res.status(500).json({ error: 'Error al procesar la solicitud' });
+      }
+
+      // Crear mensajes para la API de OpenAI usando las respuestas existentes
+      const messages = results.map(row => ({
+        role: "system",
+        content: row.respuesta
+      }));
+
+      // Llamar a la API de OpenAI con los mensajes
+      const response = await openai.createChatCompletion({
+        model: "gpt-3.5-turbo",
+        messages: messages
+      });
+
+      res.json({ message: response.data.choices[0].message });
+    });
+  } catch (error) {
+    console.error('Error al comunicarse con OpenAI:', error);
+    res.status(500).json({ error: 'Error al procesar la solicitud' });
+  }
+});
+
+
+router.get('/obtener-usuario/:id', isAuthenticated, (req, res) => {
+  const { id } = req.params;
+  const query = 'SELECT * FROM usuarios WHERE id = ?';
+
+  connection.query(query, [id], (error, results) => {
+      if (error) {
+          console.error('Error al obtener el usuario:', error);
+          return res.status(500).json({ error: 'Error interno del servidor' });
+      }
+      if (results.length > 0) {
+          res.json(results[0]);
+      } else {
+          res.status(404).json({ error: 'Usuario no encontrado' });
+      }
+  });
+});
+
+
+router.get('/obtener-pregunta/:id', isAuthenticated, (req, res) => {
+  const { id } = req.params;
+  const query = 'SELECT * FROM preguntas WHERE id = ?';
+
+  connection.query(query, [id], (error, results) => {
+      if (error) {
+          console.error('Error al obtener la pregunta:', error);
+          return res.status(500).json({ error: 'Error interno del servidor' });
+      }
+      if (results.length > 0) {
+          res.json(results[0]);
+      } else {
+          res.status(404).json({ error: 'Pregunta no encontrada' });
+      }
+  });
+});
+
 
 
 

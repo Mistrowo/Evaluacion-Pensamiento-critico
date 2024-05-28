@@ -2,15 +2,16 @@
 <html>
 <head>
   <title>Dashboard</title>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
-
   <link rel="stylesheet" href="/css/dashboard.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.1/css/bootstrap.min.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/flowbite@1.4.7/dist/flowbite.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-<body>
+<body class="bg-cover bg-center" style="background-image: url('/images/fondo.jpeg');">
   <div class="leaf" style="top: 10%; left: 20%;"></div>
   <div class="leaf" style="top: 30%; left: 70%;"></div>
   <div class="leaf" style="top: 60%; left: 40%;"></div>
@@ -21,26 +22,25 @@
     <button class="logout-btn" id="logoutBtn">Cerrar sesión</button>
   </div>
 
-
-
   <div class="card">
-  <form id="responseForm" method="POST">
-    
-      <div class="content">
-      </div>
+    <form id="responseForm" method="POST">
+      <div class="section-indicator" id="sectionIndicator">Sección 1</div> <!-- Sección actual -->
+      <div class="content"></div>
       <p class="question"><!-- Aquí se mostrará la pregunta --></p>
-      <textarea name="response" placeholder="Ingresa tu respuesta aquí"></textarea>
+      <textarea name="response" placeholder="Ingresa tu respuesta aquí" class="form-textarea mt-1 block w-full"></textarea>
       <input type="hidden" name="questionId" value="">
       <div class="buttons">
-        <button type="button" onclick="previousQuestion()">Volver</button>
-        <div class="progress-bar">
-          <div class="progress"></div>
+        <button type="button" onclick="previousQuestion()" class="btn">Volver</button>
+        <div class="progress-bar-container">
+          <div class="progress-bar">
+            <div class="progress"></div>
+          </div>
+          <span id="progressText"></span> <!-- Indicador de progreso -->
         </div>
-        <button type="button" onclick="submitResponse()">Siguiente</button>
+        <button type="button" onclick="submitResponse()" class="btn">Siguiente</button>
       </div>
     </form>
-
   </div>
-  <script src="/js/dashboard.js"></script>
+  <script src="/js/dashboard.js"></script> <!-- Asegúrate de que esta ruta es correcta -->
 </body>
 </html>

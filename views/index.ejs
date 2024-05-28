@@ -1,33 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Inicio de Sesion</title>
+    <title>Inicio de Sesión</title>
     <link rel="stylesheet" href="/css/login.css">
-   
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/flowbite@1.4.7/dist/flowbite.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body>
-    <div id="mover">
-        <h1>Iniciar Sesión</h1>
-        <form action="/login" method="post">
-
-            <label for="usuario">Usuario:</label>
-            <input type="text" id="usuario" name="usuario" required>
-
-            <label for="contrasena">Contraseña:</label>
-            <input type="password" id="contrasena" name="contrasena" required>
-
-            <label for="establecimiento">Establecimiento:</label>
-<select id="establecimiento" name="establecimiento" required>
-  <option value="">Selecciona un establecimiento</option>
-  <% establecimientos.forEach(establecimiento => { %>
-    <option value="<%= establecimiento.establecimiento %>"><%= establecimiento.establecimiento %></option>
-  <% }) %>
-</select>
-
-
-            <input type="submit" value="Ingresar">
-        </form>
+<body class="bg-cover bg-center" style="background-image: url('/images/fondo.jpeg');">
+    <div class="flex items-center justify-center min-h-screen">
+        <div class="bg-white bg-opacity-80 p-8 rounded-lg shadow-lg w-full max-w-md">
+            <h1 class="text-3xl font-bold text-center text-orange-600 mb-6">Iniciar Sesión</h1>
+            <form action="/login" method="post" class="space-y-4">
+                <div>
+                    <label for="usuario" class="block font-medium text-gray-700">Usuario:</label>
+                    <input type="text" id="usuario" name="usuario" required class="block w-full px-4 py-2 border-2 border-orange-300 rounded-md bg-orange-50 focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50">
+                </div>
+                <div>
+                    <label for="contrasena" class="block font-medium text-gray-700">Contraseña:</label>
+                    <input type="password" id="contrasena" name="contrasena" required class="block w-full px-4 py-2 border-2 border-orange-300 rounded-md bg-orange-50 focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50">
+                </div>
+                <div>
+                    <label for="establecimiento" class="block font-medium text-gray-700">Establecimiento:</label>
+                    <select id="establecimiento" name="establecimiento" required class="block w-full px-4 py-2 border-2 border-orange-300 rounded-md bg-orange-50 focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50">
+                        <option value="">Selecciona un establecimiento</option>
+                        <% establecimientos.forEach(establecimiento => { %>
+                            <option value="<%= establecimiento.nombre %>"><%= establecimiento.nombre %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                <div>
+                    <label for="curso" class="block font-medium text-gray-700">Curso:</label>
+                    <select id="curso" name="curso" required class="block w-full px-4 py-2 border-2 border-orange-300 rounded-md bg-orange-50 focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50">
+                        <option value="">Selecciona un curso</option>
+                        <% establecimientos.forEach(establecimiento => { %>
+                            <% establecimiento.cursos.forEach(curso => { %>
+                                <option value="<%= curso %>"><%= curso %></option>
+                            <% }) %>
+                        <% }) %>
+                    </select>
+                </div>
+                <div>
+                    <input type="submit" value="Ingresar" class="block w-full px-4 py-2 bg-orange-500 text-white font-bold rounded-md hover:bg-orange-600 focus:bg-orange-600 focus:outline-none focus:ring focus:ring-orange-200 focus:ring-opacity-50">
+                </div>
+            </form>
+        </div>
     </div>
-    <script src="/js/login.js"></script>
 </body>
-</html>
+</html

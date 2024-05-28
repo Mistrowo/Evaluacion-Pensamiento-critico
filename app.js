@@ -1,25 +1,23 @@
+require('dotenv').config();
+
+
 const express = require('express');
 const app = express();
 const port = 3000;
-
 const session = require('express-session');
+const bodyParser = require('body-parser');
 
 app.use(session({
-  secret: 'mi_secreto', 
-  resave: false, 
-  saveUninitialized: false, 
-  cookie: { secure: false } 
+  secret: 'mi_secreto',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false }
 }));
 
-
-const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
-
-
 app.use(express.static('public'));
 
 const indexRouter = require('./routes/index');
-
 app.use('/', indexRouter);
 
 app.set('view engine', 'ejs');

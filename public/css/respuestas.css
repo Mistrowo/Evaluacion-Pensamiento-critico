@@ -1,5 +1,4 @@
-/* analisis-respuestas.css */
-
+/* Estilos generales */
 body {
     background: linear-gradient(135deg, #FF6B6B, #FFD93D);
     font-family: 'Poppins', sans-serif;
@@ -12,54 +11,60 @@ body {
     position: relative;
     overflow: hidden;
 }
-  
+
+/* Información del usuario */
 .user-info {
     position: absolute;
     top: 20px;
     right: 20px;
     background-color: rgba(255, 236, 219, 0.8);
     border-radius: 10px;
-    padding: 10px;
+    padding: 15px;
     font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: right;
+}
+
+.user-info p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+/* Botones */
+.logout-btn, .volver-btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #FF6B35;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .logout-btn {
-    position: absolute;
-    top: 0px;
-    right: 140px;
-    padding: 5px 10px;
-    background-color: #FF6B35;
-    color: #FFFFFF;
-    border: none;
-    border-radius: 10px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
 }
 
 .volver-btn {
-    position: absolute;
-    top: 70px;
-    right: 0px;
-    padding: 5px 10px;
-    background-color: #FF6B35;
-    color: #FFFFFF;
-    border: none;
-    border-radius: 10px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    display: block;
+    width: 100%;
 }
 
 .logout-btn:hover, .volver-btn:hover {
     background-color: #FF8C66;
 }
-  
+
+/* Contenedor de análisis */
 .analysis-container {
     position: absolute;
-    left: 50%;
-    top:10%;
-    transform: translateX(-50%);
+    left: 30%;
+    top: 10%;
+    transform: translateX(-30%);
     background-color: rgba(255, 255, 255, 0.8);
     padding: 20px;
     border-radius: 10px;
@@ -75,6 +80,19 @@ body {
     max-height: 100%;
 }
 
+/* Título */
+.analysis-container h2 {
+    font-size: 32px;
+    color: #4D4D4D;
+    margin-bottom: 20px;
+}
+
+/* Ajuste de tabla */
+.analysis-container table {
+    width: 100%;
+}
+
+/* Animación de hojas flotantes */
 .leaf {
     position: absolute;
     width: 80px;
@@ -84,36 +102,54 @@ body {
     background-repeat: no-repeat;
     animation: leaf-float 5s infinite;
 }
-  
+
 @keyframes leaf-float {
-    /* Animación de las hojas flotantes */
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+    100% {
+        transform: translateY(0);
+    }
 }
 
+/* Contenedor de la cuadrícula */
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     grid-gap: 20px;
     padding: 20px;
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
-  
+
+/* Elementos de la cuadrícula */
 .grid-item {
     background-color: #fff;
     padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-  
+
 .grid-item:hover {
     transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.grid-item h3 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.grid-item p {
+    font-size: 18px;
+    color: #666;
 }
 
 .grid-item button {
-    background-color: #FF6B6B;
+    background-color: #FF6B35;
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -121,14 +157,86 @@ body {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-top: 20px;
 }
 
 .grid-item button:hover {
     background-color: #FF4D4D;
 }
+
 .grid-item h3 i {
-    color: #FF6B6B;
+    color: #FF6B35;
     margin-left: 10px;
     cursor: pointer;
 }
 
+/* Loader */
+.loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Contenedor de puntuación */
+.score-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Círculo de puntuación */
+.score-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #3498db;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    font-weight: bold;
+}
+
+/* Texto de puntuación */
+.score-text {
+    margin-top: 20px;
+    font-size: 32px; /* Aumento del tamaño de fuente */
+    color: #000000; /* Cambio de color a negro */
+    font-weight: bold; /* Opcional: Hacer la fuente más gruesa */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Opcional: Sombra para mejorar la visibilidad */
+}
+
+/* Contenedor de evaluación */
+.evaluation-container {
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 80%;
+    margin: 20px auto;
+    text-align: left;
+}
+
+.evaluation-text {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #333333;
+}
