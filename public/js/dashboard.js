@@ -3,37 +3,37 @@ const activities = [
         type: "image",
         src: "/images/imagenapp.jpg",
         questions: [
-            { question_id: "1", habilidad: "Interpretación", pregunta: "¿Cuál es tu opinión sobre la imagen?", "data-question-id": 1 },
-            { question_id: "2", habilidad: "Análisis", pregunta: "¿Qué detalles puedes observar en la imagen?", "data-question-id": 2 },
-            { question_id: "3", habilidad: "Inferencia", pregunta: "¿Qué crees que sucede en la imagen?", "data-question-id": 3 },
-            { question_id: "4", habilidad: "Evaluación", pregunta: "¿Qué opinión tienes con respecto a lo que muestra la imagen?", "data-question-id": 4 },
-            { question_id: "5", habilidad: "Metacognición", pregunta: "¿Cómo te hace sentir esta imagen?", "data-question-id": 5 }
+            { question_id: "1", habilidad: "Interpretación", pregunta: "Pregunta 1: ¿Cómo describirías la imagen?", "data-question-id": 1 },
+            { question_id: "2", habilidad: "Análisis", pregunta: " Pregunta 2: ¿Qué mensaje o significado puedes encontrar en la imagen?", "data-question-id": 2 },
+            { question_id: "3", habilidad: "Inferencia", pregunta: "Pregunta 3: ¿A qué conclusiones se pueden llegar a partir de la imagen?", "data-question-id": 3 },
+            { question_id: "4", habilidad: "Evaluación", pregunta: "Pregunta 4: ¿Cómo evaluarías lo que aprendiste al observar esta imagen y cómo podrías usarlo en otras situaciones?", "data-question-id": 4 },
+            { question_id: "5", habilidad: "Metacognición", pregunta: "Pregunta 5: ¿Qué preguntas te hiciste mientras mirabas la imagen? ¿Se respondieron algunas de esas preguntas?", "data-question-id": 5 }
         ]
     },
     {
         type: "video",
         src: "/video/video.mp4",
         questions: [
-            { question_id: "6", habilidad: "Interpretación", pregunta: "¿Qué emociones te transmite este video?", "data-question-id": 6 },
-            { question_id: "7", habilidad: "Análisis", pregunta: "¿Cuáles son los elementos principales del video?", "data-question-id": 7 },
-            { question_id: "8", habilidad: "Inferencia", pregunta: "¿Qué conclusiones puedes sacar del video?", "data-question-id": 8 },
-            { question_id: "9", habilidad: "Evaluación", pregunta: "¿El video comunica un mensaje claro? Justifique", "data-question-id": 9 },
-            { question_id: "10", habilidad: "Metacognición", pregunta: "¿Qué aprendiste al ver este video?", "data-question-id": 10 }
+            { question_id: "6", habilidad: "Interpretación", pregunta: "Pregunta 1: s¿Cómo describirías el video?", "data-question-id": 6 },
+            { question_id: "7", habilidad: "Análisis", pregunta: "Pregunta 2: ¿Qué mensaje o significado puedes encontrar en el video?", "data-question-id": 7 },
+            { question_id: "8", habilidad: "Inferencia", pregunta: "Pregunta 3: ¿A qué conclusiones se pueden llegar a partir del video?", "data-question-id": 8 },
+            { question_id: "9", habilidad: "Evaluación", pregunta: "Pregunta 4: ¿Cómo evaluarías lo que aprendiste al observar este video y cómo podrías usarlo en otras situaciones?", "data-question-id": 9 },
+            { question_id: "10", habilidad: "Metacognición", pregunta: "Pregunta 5: ¿Qué preguntas te hiciste mientras mirabas el video? ¿Se respondieron algunas de esas preguntas?", "data-question-id": 10 }
         ]
     },
     {
         type: "text",
-        content: `> La primera vez que vi la lluvia fue una tarde de verano en un patio interior. Ese patio era un mundo completo, con una fuente de azulejos en el centro, arriates de flores y un viejo naranjo con el tronco blanco de cal. Yo me hallaba fascinada contemplando aquel árbol tan raro, cuyas hojas eran como de laca verde y tenía algunas frutas tan grandes y redondas como bolas de billar. De pronto escuché un ruido ensordecedor sobre los techos de las casas vecinas, el cielo se oscureció y empezaron a caer gotas de agua fría, después fue un diluvio._
+        content: ` La primera vez que vi la lluvia fue una tarde de verano en un patio interior. Ese patio era un mundo completo, con una fuente de azulejos en el centro, arriates de flores y un viejo naranjo con el tronco blanco de cal. Yo me hallaba fascinada contemplando aquel árbol tan raro, cuyas hojas eran como de laca verde y tenía algunas frutas tan grandes y redondas como bolas de billar. De pronto escuché un ruido ensordecedor sobre los techos de las casas vecinas, el cielo se oscureció y empezaron a caer gotas de agua fría, después fue un diluvio._
     
     > Aquello me pareció extraordinario, un prodigio aterrador y maravilloso. El patio se inundó de inmediato, los arriates se convirtieron en pequeños lagos, el naranjo sacudía sus ramas empapadas y enormes gotas rebotaban en el suelo y sobre la fuente. Me acurruqué en un rincón, sollozando de pánico porque creí que el mundo se estaba disolviendo. Mi madre me tomó en sus brazos para tranquilizarme, me asomó al aguacero y me dijo que no tuviera miedo, que eso era sólo la lluvia, un fenómeno natural tan beneficioso como el sol.
     
     _Extracto de la novela "Eva Luna" de Isabel Allende`,
         questions: [
-            { question_id: "11", habilidad: "Interpretación", pregunta: "¿Cuál es tu opinión sobre este texto?", "data-question-id": 11 },
-            { question_id: "12", habilidad: "Análisis", pregunta: "¿Cuáles son las ideas principales del texto?", "data-question-id": 12 },
-            { question_id: "13", habilidad: "Inferencia", pregunta: "¿Qué mensaje intenta transmitir el autor?", "data-question-id": 13 },
-            { question_id: "14", habilidad: "Evaluación", pregunta: "¿El texto logra su objetivo? Justifique", "data-question-id": 14 },
-            { question_id: "15", habilidad: "Metacognición", pregunta: "¿Qué pensamientos te provocó este texto?", "data-question-id": 15 }
+            { question_id: "11", habilidad: "Interpretación", pregunta: " Pregunta 1: ¿Cómo describirías el texto?", "data-question-id": 11 },
+            { question_id: "12", habilidad: "Análisis", pregunta: "Pregunta 2: ¿Qué mensaje o significado puedes encontrar en el texto?", "data-question-id": 12 },
+            { question_id: "13", habilidad: "Inferencia", pregunta: "Pregunta 3: ¿A qué conclusiones se pueden llegar a partir del texto?", "data-question-id": 13 },
+            { question_id: "14", habilidad: "Evaluación", pregunta: "Pregunta 4: ¿Cómo evaluarías lo que aprendiste al leer este texto y cómo podrías usarlo en otras situaciones?", "data-question-id": 14 },
+            { question_id: "15", habilidad: "Metacognición", pregunta: "Pregunta 5: ¿Qué preguntas te hiciste mientras leías el texto? ¿Se respondieron algunas de esas preguntas?", "data-question-id": 15 }
         ]
     }
 ];
@@ -219,7 +219,7 @@ function resetActivities() {
 
 function resetAndRedirect() {
     localStorage.removeItem('activityState');
-    window.location.href = '/instructivo';
+    window.location.href = '/finalizado';
 }
 
 function saveState() {

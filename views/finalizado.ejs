@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Felicitaciones</title>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/css/finalizado.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico|Roboto&display=swap">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/flowbite@1.4.7/dist/flowbite.js"></script>
+    <link rel="icon" href="/images/logoapp.jpg" type="image/x-icon">
+
+</head>
+<body>
+    <div id="bubbles-container"></div>
+    <div class="leaf" style="top: 10%; left: 20%;"></div>
+    <div class="leaf" style="top: 30%; left: 70%;"></div>
+    <div class="leaf" style="top: 60%; left: 40%;"></div>
+
+    <div class="user-info">
+        Usuario: <%= usuario %><br>
+        Fecha: <%= fecha %>
+        <button class="logout-btn" id="logoutBtn">Cerrar sesión</button>
+    </div>
+
+    <div class="card">
+        <div class="content">
+            <h1 class="title">¡Felicitaciones!</h1>
+            <p class="subtitle">Has terminado las actividades</p>
+
+            <a href="/logout" class="finalizar-btn">
+                <span class="btn-content">Finalizar</span>
+                <div class="btn-bg"></div>
+            </a>
+            <a href="/instructivo" class="volver-btn">
+                <span class="btn-content">Volver al Instructivo</span>
+                <div class="btn-bg"></div>
+            </a>
+
+            <p class="motivation-quote">"El aprendizaje nunca termina, es una aventura de por vida."</p>
+        </div>
+    </div>
+
+    <script src="/js/finalizado.js"></script>
+    <script>
+        // Animación de burbujas de fondo
+        function createBubble() {
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+            bubble.style.left = `${Math.random() * 100}vw`;
+            bubble.style.animationDuration = `${Math.random() * 3 + 2}s`;
+            bubble.style.animationDelay = `${Math.random() * 5}s`;
+            document.getElementById('bubbles-container').appendChild(bubble);
+
+            setTimeout(() => {
+                bubble.remove();
+            }, 8000);
+        }
+
+        setInterval(createBubble, 300);
+    </script>
+</body>
+</html>

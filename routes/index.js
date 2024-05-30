@@ -152,6 +152,14 @@ router.get('/instructivo', isAuthenticated, (req, res) => {
 });
 
 
+router.get('/finalizado', isAuthenticated, (req, res) => {
+  const usuario = req.session.usuario.nombre;
+  const fecha = new Date().toLocaleDateString();
+  req.session.currentResponseGroupId = null; // Inicializar currentResponseGroupId
+  res.render('finalizado', { usuario, fecha });
+});
+
+
 router.get('/logout', (req, res) => {
   req.session.destroy(() => {
     res.redirect('/');

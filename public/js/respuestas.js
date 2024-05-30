@@ -20,7 +20,6 @@ function eliminarCarta(idGeneral) {
     }
 }
 
-
 const rubrica = `
 Imagen:
 Habilidad
@@ -164,6 +163,46 @@ async function mostrarRespuesta(container, idGeneral) {
     }
 }
 
+function mostrarLoaderEntrenado(idGeneral) {
+    const analysisContainer = document.querySelector('.analysis-container');
+    analysisContainer.innerHTML = `<div class="loader"></div>`; // Añade el loader
+
+    // Configura el tiempo después del cual el loader será reemplazado por la respuesta de la API
+    setTimeout(async () => {
+        await mostrarRespuestaEntrenado(analysisContainer, idGeneral);
+    }, 5000); // 5000 ms = 5 segundos
+}
+
+async function mostrarRespuestaEntrenado(container, idGeneral) {
+    try {
+        const respuestas = await fetch(`/obtener-respuestas-general/${idGeneral}`).then(res => res.json());
+        const evaluaciones = [];
+
+        for (let i = 0; i < respuestas.length; i++) {
+            const r = respuestas[i];
+            const prompt = `${rubrica}\n\nPregunta: ${r.pregunta}\nRespuesta: ${r.respuesta}\n\nProporciona un análisis y puntaje basados en la rúbrica. Utiliza el modelo entrenado.`;
+
+            console.log('Prompt enviado a la API:', prompt); // Agregado para depuración
+
+            const response = await getCompletion(prompt);
+            const evaluacion = response.choices[0].message.content.trim();
+
+            evaluaciones.push({
+                id: r.id_respuesta,
+                pregunta: r.pregunta,
+                respuesta: r.respuesta,
+                analisis: evaluacion,
+                puntaje: extractScore(evaluacion) // Implementa esta función para extraer el puntaje del análisis
+            });
+        }
+
+        renderEvaluaciones(container, evaluaciones);
+    } catch (error) {
+        console.error('Error al obtener la evaluación:', error);
+        container.innerHTML = '<div class="error-message">Error al obtener la evaluación</div>';
+    }
+}
+
 function extractScore(evaluacion) {
     const scoreRegex = /Puntaje: (\d+)/i;
     const match = evaluacion.match(scoreRegex);
@@ -200,7 +239,6 @@ function renderEvaluaciones(container, evaluaciones) {
         </div>
     `;
 }
-
 
 document.addEventListener('DOMContentLoaded', () => {
     const logoutBtn = document.getElementById('logoutBtn');
@@ -251,7 +289,8 @@ function agregarElementoColumna(idGeneral, titulo, contenido, esBoton = false) {
     gridItem.innerHTML = `
         <h3>${titulo} <i class="fas fa-trash" onclick="eliminarCarta(${idGeneral})"></i></h3>
         <p>${contenido}</p>
-        ${esBoton ? `<button onclick="mostrarLoader(${idGeneral})">Calcular</button>` : ''}
+        ${esBoton ? `<button onclick="mostrarLoader(${idGeneral})">Calcular</button>
+        <button onclick="mostrarLoaderEntrenado(${idGeneral})">Calcular FT</button>` : ''}
     `;
     gridContainer.appendChild(gridItem);
 }
