@@ -3,37 +3,37 @@ const activities = [
         type: "image",
         src: "/images/imagenapp.jpg",
         questions: [
-            { question_id: "1", habilidad: "Interpretación", pregunta: "Pregunta 1: ¿Cómo describirías la imagen?", "data-question-id": 1 },
-            { question_id: "2", habilidad: "Análisis", pregunta: " Pregunta 2: ¿Qué mensaje o significado puedes encontrar en la imagen?", "data-question-id": 2 },
-            { question_id: "3", habilidad: "Inferencia", pregunta: "Pregunta 3: ¿A qué conclusiones se pueden llegar a partir de la imagen?", "data-question-id": 3 },
-            { question_id: "4", habilidad: "Evaluación", pregunta: "Pregunta 4: ¿Cómo evaluarías lo que aprendiste al observar esta imagen y cómo podrías usarlo en otras situaciones?", "data-question-id": 4 },
-            { question_id: "5", habilidad: "Metacognición", pregunta: "Pregunta 5: ¿Qué preguntas te hiciste mientras mirabas la imagen? ¿Se respondieron algunas de esas preguntas?", "data-question-id": 5 }
+            { question_id: 52, habilidad: "Interpretación", pregunta: "Pregunta 1: ¿Cómo describirías la imagen?", "data-question-id": 52 },
+            { question_id: 53, habilidad: "Análisis", pregunta: "Pregunta 2: ¿Qué mensaje o significado puedes encontrar en la imagen?", "data-question-id": 53 },
+            { question_id: 54, habilidad: "Inferencia", pregunta: "Pregunta 3: ¿A qué conclusiones se pueden llegar a partir de la imagen?", "data-question-id": 54 },
+            { question_id: 55, habilidad: "Evaluación", pregunta: "Pregunta 4: ¿Cómo evaluarías lo que aprendiste al observar esta imagen y cómo podrías usarlo en otras situaciones?", "data-question-id": 55 },
+            { question_id: 56, habilidad: "Metacognición", pregunta: "Pregunta 5: ¿Qué preguntas te hiciste mientras mirabas la imagen? ¿Se respondieron algunas de esas preguntas?", "data-question-id": 56 }
         ]
     },
     {
         type: "video",
         src: "/video/video.mp4",
         questions: [
-            { question_id: "6", habilidad: "Interpretación", pregunta: "Pregunta 1: s¿Cómo describirías el video?", "data-question-id": 6 },
-            { question_id: "7", habilidad: "Análisis", pregunta: "Pregunta 2: ¿Qué mensaje o significado puedes encontrar en el video?", "data-question-id": 7 },
-            { question_id: "8", habilidad: "Inferencia", pregunta: "Pregunta 3: ¿A qué conclusiones se pueden llegar a partir del video?", "data-question-id": 8 },
-            { question_id: "9", habilidad: "Evaluación", pregunta: "Pregunta 4: ¿Cómo evaluarías lo que aprendiste al observar este video y cómo podrías usarlo en otras situaciones?", "data-question-id": 9 },
-            { question_id: "10", habilidad: "Metacognición", pregunta: "Pregunta 5: ¿Qué preguntas te hiciste mientras mirabas el video? ¿Se respondieron algunas de esas preguntas?", "data-question-id": 10 }
+            { question_id: 57, habilidad: "Interpretación", pregunta: "Pregunta 1: ¿Cómo describirías el video?", "data-question-id": 57 },
+            { question_id: 58, habilidad: "Análisis", pregunta: "Pregunta 2: ¿Qué mensaje o significado puedes encontrar en el video?", "data-question-id": 58 },
+            { question_id: 59, habilidad: "Inferencia", pregunta: "Pregunta 3: ¿A qué conclusiones se pueden llegar a partir del video?", "data-question-id": 59 },
+            { question_id: 60, habilidad: "Evaluación", pregunta: "Pregunta 4: ¿Cómo evaluarías lo que aprendiste al observar este video y cómo podrías usarlo en otras situaciones?", "data-question-id": 60 },
+            { question_id: 61, habilidad: "Metacognición", pregunta: "Pregunta 5: ¿Qué preguntas te hiciste mientras mirabas el video? ¿Se respondieron algunas de esas preguntas?", "data-question-id": 61 }
         ]
     },
     {
         type: "text",
-        content: ` La primera vez que vi la lluvia fue una tarde de verano en un patio interior. Ese patio era un mundo completo, con una fuente de azulejos en el centro, arriates de flores y un viejo naranjo con el tronco blanco de cal. Yo me hallaba fascinada contemplando aquel árbol tan raro, cuyas hojas eran como de laca verde y tenía algunas frutas tan grandes y redondas como bolas de billar. De pronto escuché un ruido ensordecedor sobre los techos de las casas vecinas, el cielo se oscureció y empezaron a caer gotas de agua fría, después fue un diluvio._
+        content: ` La primera vez que vi la lluvia fue una tarde de verano en un patio interior. Ese patio era un mundo completo, con una fuente de azulejos en el centro, arriates de flores y un viejo naranjo con el tronco blanco de cal. Yo me hallaba fascinada contemplando aquel árbol tan raro, cuyas hojas eran como de laca verde y tenía algunas frutas tan grandes y redondas como bolas de billar. De pronto escuché un ruido ensordecedor sobre los techos de las casas vecinas, el cielo se oscureció y empezaron a caer gotas de agua fría, después fue un diluvio.
     
-    > Aquello me pareció extraordinario, un prodigio aterrador y maravilloso. El patio se inundó de inmediato, los arriates se convirtieron en pequeños lagos, el naranjo sacudía sus ramas empapadas y enormes gotas rebotaban en el suelo y sobre la fuente. Me acurruqué en un rincón, sollozando de pánico porque creí que el mundo se estaba disolviendo. Mi madre me tomó en sus brazos para tranquilizarme, me asomó al aguacero y me dijo que no tuviera miedo, que eso era sólo la lluvia, un fenómeno natural tan beneficioso como el sol.
+    Aquello me pareció extraordinario, un prodigio aterrador y maravilloso. El patio se inundó de inmediato, los arriates se convirtieron en pequeños lagos, el naranjo sacudía sus ramas empapadas y enormes gotas rebotaban en el suelo y sobre la fuente. Me acurruqué en un rincón, sollozando de pánico porque creí que el mundo se estaba disolviendo. Mi madre me tomó en sus brazos para tranquilizarme, me asomó al aguacero y me dijo que no tuviera miedo, que eso era sólo la lluvia, un fenómeno natural tan beneficioso como el sol.
     
-    _Extracto de la novela "Eva Luna" de Isabel Allende`,
+    `,
         questions: [
-            { question_id: "11", habilidad: "Interpretación", pregunta: " Pregunta 1: ¿Cómo describirías el texto?", "data-question-id": 11 },
-            { question_id: "12", habilidad: "Análisis", pregunta: "Pregunta 2: ¿Qué mensaje o significado puedes encontrar en el texto?", "data-question-id": 12 },
-            { question_id: "13", habilidad: "Inferencia", pregunta: "Pregunta 3: ¿A qué conclusiones se pueden llegar a partir del texto?", "data-question-id": 13 },
-            { question_id: "14", habilidad: "Evaluación", pregunta: "Pregunta 4: ¿Cómo evaluarías lo que aprendiste al leer este texto y cómo podrías usarlo en otras situaciones?", "data-question-id": 14 },
-            { question_id: "15", habilidad: "Metacognición", pregunta: "Pregunta 5: ¿Qué preguntas te hiciste mientras leías el texto? ¿Se respondieron algunas de esas preguntas?", "data-question-id": 15 }
+            { question_id: 62, habilidad: "Interpretación", pregunta: "Pregunta 1: ¿Cómo describirías el texto?", "data-question-id": 62 },
+            { question_id: 63, habilidad: "Análisis", pregunta: "Pregunta 2: ¿Qué mensaje o significado puedes encontrar en el texto?", "data-question-id": 63 },
+            { question_id: 64, habilidad: "Inferencia", pregunta: "Pregunta 3: ¿A qué conclusiones se pueden llegar a partir del texto?", "data-question-id": 64 },
+            { question_id: 65, habilidad: "Evaluación", pregunta: "Pregunta 4: ¿Cómo evaluarías lo que aprendiste al leer este texto y cómo podrías usarlo en otras situaciones?", "data-question-id": 65 },
+            { question_id: 66, habilidad: "Metacognición", pregunta: "Pregunta 5: ¿Qué preguntas te hiciste mientras leías el texto? ¿Se respondieron algunas de esas preguntas?", "data-question-id": 66 }
         ]
     }
 ];
@@ -55,6 +55,7 @@ let currentActivity = 0;
 let currentQuestion = 0;
 let currentResponseSubmitted = false;
 let currentVideo = null;
+let responses = {}; // Objeto para almacenar las respuestas ingresadas
 
 function updateContent() {
     const activity = activities[currentActivity];
@@ -77,8 +78,18 @@ function updateContent() {
         currentVideo = video; // Guardar referencia al video actual
     } else if (activity.type === 'text') {
         const textDiv = document.createElement('div');
-        textDiv.textContent = activity.content;
         textDiv.className = 'text-content';
+
+        const textParagraph = document.createElement('p');
+        textParagraph.textContent = activity.content;
+        
+        const authorInfo = document.createElement('span');
+        authorInfo.className = 'author';
+        authorInfo.textContent = "Extracto de la novela 'Eva Luna' de Isabel Allende";
+        
+        textDiv.appendChild(textParagraph);
+        textDiv.appendChild(authorInfo);
+
         mediaContainer.appendChild(textDiv);
     }
 
@@ -91,6 +102,7 @@ function updateContent() {
     const sectionIndicator = document.getElementById('sectionIndicator');
     sectionIndicator.textContent = `Sección ${currentActivity + 1}`;
 }
+
 
 function updateProgressBar() {
     const progressBar = document.querySelector('.progress');
@@ -113,16 +125,14 @@ function submitResponse() {
     }
 
     const questionIdInput = document.querySelector('input[name="questionId"]');
-    console.log('questionIdInput:', questionIdInput);
+    const responseKey = `${currentActivity}-${currentQuestion}`;
+    responses[responseKey] = response; // Guardar la respuesta localmente
 
     const params = new URLSearchParams();
     params.append('response', response);
     params.append('question_id', questionIdInput.value);
-    console.log('activities[currentActivity].questions:', activities[currentActivity].questions);
-    console.log('currentQuestion:', currentQuestion);
     params.append('pregunta', activities[currentActivity].questions[currentQuestion].pregunta);
 
-    console.log('Datos enviados:', params.toString());
     fetch('/save-response', {
         method: 'POST',
         headers: {
@@ -132,15 +142,25 @@ function submitResponse() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Respuesta del servidor:', data);
-        currentResponseSubmitted = true;
-        nextQuestion();
-        saveState();
+        if (data.success) {
+            console.log('Respuesta guardada:', data);
+            currentResponseSubmitted = true;
+            nextQuestion();
+            saveState();
+        } else {
+            console.error('Error al guardar la respuesta:', data.message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Hubo un error al guardar la respuesta. Intenta de nuevo.',
+            });
+        }
     })
     .catch(error => {
         console.error('Error al guardar la respuesta:', error);
     });
 }
+
 
 function nextQuestion() {
     const responseInput = document.querySelector('textarea[name="response"]');
@@ -178,8 +198,6 @@ function nextQuestion() {
     updateContent();
     updateProgressBar();
     saveState();
-
-    // Limpia el contenido del campo de texto después de actualizar el contenido de la pregunta
     responseInput.value = '';
 }
 
@@ -194,13 +212,17 @@ function previousQuestion() {
         currentActivity--;
         currentQuestion = activities[currentActivity].questions.length - 1;
     }
+
     updateContent();
     updateProgressBar();
     saveState();
-
-    // Limpia el contenido del campo de texto después de actualizar el contenido de la pregunta
     const responseInput = document.querySelector('textarea[name="response"]');
-    responseInput.value = '';
+    const responseKey = `${currentActivity}-${currentQuestion}`;
+    if (responses[responseKey]) {
+        responseInput.value = responses[responseKey];
+    } else {
+        responseInput.value = '';
+    }
 }
 
 function resetActivities() {
@@ -208,11 +230,10 @@ function resetActivities() {
     currentQuestion = 0;
     currentResponseSubmitted = false;
     currentVideo = null;
+    responses = {};
     updateContent();
     updateProgressBar();
     resetAndRedirect();
-
-    // Limpia el contenido del campo de texto después de reiniciar las actividades
     const responseInput = document.querySelector('textarea[name="response"]');
     responseInput.value = '';
 }
@@ -224,9 +245,10 @@ function resetAndRedirect() {
 
 function saveState() {
     const state = {
-      currentActivity: currentActivity,
-      currentQuestion: currentQuestion,
-      currentResponseSubmitted: currentResponseSubmitted
+        currentActivity: currentActivity,
+        currentQuestion: currentQuestion,
+        currentResponseSubmitted: currentResponseSubmitted,
+        responses: responses
     };
     localStorage.setItem('activityState', JSON.stringify(state));
 }
@@ -237,7 +259,21 @@ function loadState() {
         currentActivity = savedState.currentActivity;
         currentQuestion = savedState.currentQuestion;
         currentResponseSubmitted = savedState.currentResponseSubmitted;
+        responses = savedState.responses || {};
         updateContent();
         updateProgressBar();
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            window.location.href = '/logout';
+        });
+    }
+    loadState();
+
+    updateContent();
+    updateProgressBar();
+});

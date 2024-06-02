@@ -62,9 +62,9 @@ body {
 /* Contenedor de análisis */
 .analysis-container {
     position: absolute;
-    left: 30%;
+    left: 45%;
     top: 10%;
-    transform: translateX(-30%);
+    transform: translateX(-50%);
     background-color: rgba(255, 255, 255, 0.8);
     padding: 20px;
     border-radius: 10px;
@@ -73,11 +73,13 @@ body {
     width: 80%;
     max-width: 1200px;
     height: 70%;
+    display: flex;
+    flex-direction: column;
 }
 
 .scroll-container {
     overflow-y: auto;
-    max-height: 100%;
+    flex-grow: 1;
 }
 
 /* Título */
@@ -92,35 +94,14 @@ body {
     width: 100%;
 }
 
-/* Animación de hojas flotantes */
-.leaf {
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    background-image: url('/images/leaf.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    animation: leaf-float 5s infinite;
-}
-
-@keyframes leaf-float {
-    0% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-20px);
-    }
-    100% {
-        transform: translateY(0);
-    }
-}
-
 /* Contenedor de la cuadrícula */
 .grid-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     grid-gap: 20px;
     padding: 20px;
+    overflow-y: auto; /* Scroll vertical */
+    max-height: 100%; /* Altura máxima del contenedor */
 }
 
 /* Elementos de la cuadrícula */
@@ -233,6 +214,8 @@ body {
     max-width: 80%;
     margin: 20px auto;
     text-align: left;
+    max-height: 70vh; /* Altura máxima del contenedor */
+    overflow-y: auto; /* Scroll vertical */
 }
 
 .evaluation-text {

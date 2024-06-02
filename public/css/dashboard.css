@@ -182,3 +182,17 @@ button:active, .btn:active {
     margin: 10px 0;
     padding: 0 20px;
 }
+.text-content {
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.text-content .author {
+    display: block;
+    font-style: italic;
+    font-weight: bold;
+    text-align: right;
+    margin-top: 10px;
+}

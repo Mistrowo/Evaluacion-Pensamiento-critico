@@ -239,45 +239,55 @@ router.post('/save-response', isAuthenticated, (req, res) => {
   const response = req.body.response;
   const questionId = req.body.question_id;
   const userId = req.session.usuario.id;
-  const pregunta = req.body.pregunta; // Obtener la pregunta desde el cuerpo de la solicitud
+  const pregunta = req.body.pregunta;
 
   console.log('Datos recibidos:', req.body);
 
-  if (req.session.currentResponseGroupId === null) {
-      // Guardar la primera respuesta y usar su id_respuesta como id_respuesta_general
-      const query = 'INSERT INTO respuestas (id_usuario, id_pregunta, respuesta, pregunta, fecha_respuesta) VALUES (?, ?, ?, ?, NOW())';
-      connection.query(query, [userId, questionId, response, pregunta], (error, results) => {
-          if (error) {
-              console.error('Error al guardar la respuesta en la base de datos:', error);
-              return res.status(500).json({ success: false, message: 'Error al guardar la respuesta' });
-          }
+  const checkQuery = 'SELECT id_respuesta FROM respuestas WHERE id_usuario = ? AND id_pregunta = ?';
+  connection.query(checkQuery, [userId, questionId], (checkError, checkResults) => {
+      if (checkError) {
+          console.error('Error al verificar la respuesta en la base de datos:', checkError);
+          return res.status(500).json({ success: false, message: 'Error al verificar la respuesta' });
+      }
 
-          const insertedId = results.insertId;
-          req.session.currentResponseGroupId = insertedId;
-
-          // Actualizar el id_respuesta_general de la primera respuesta
-          const updateQuery = 'UPDATE respuestas SET id_respuesta_general = ? WHERE id_respuesta = ?';
-          connection.query(updateQuery, [insertedId, insertedId], (updateError) => {
+      if (checkResults.length > 0) {
+          // Actualizar la respuesta existente
+          const updateQuery = 'UPDATE respuestas SET respuesta = ?, fecha_respuesta = NOW() WHERE id_respuesta = ?';
+          connection.query(updateQuery, [response, checkResults[0].id_respuesta], (updateError) => {
               if (updateError) {
-                  console.error('Error al actualizar el id_respuesta_general:', updateError);
-                  return res.status(500).json({ success: false, message: 'Error al actualizar el id_respuesta_general' });
+                  console.error('Error al actualizar la respuesta en la base de datos:', updateError);
+                  return res.status(500).json({ success: false, message: 'Error al actualizar la respuesta' });
               }
-
-              res.json({ success: true, message: 'Respuesta guardada con éxito.' });
+              res.json({ success: true, message: 'Respuesta actualizada con éxito.' });
           });
-      });
-  } else {
-      const query = 'INSERT INTO respuestas (id_usuario, id_pregunta, respuesta, pregunta, fecha_respuesta, id_respuesta_general) VALUES (?, ?, ?, ?, NOW(), ?)';
-      connection.query(query, [userId, questionId, response, pregunta, req.session.currentResponseGroupId], (error, results) => {
-          if (error) {
-              console.error('Error al guardar la respuesta en la base de datos:', error);
-              return res.status(500).json({ success: false, message: 'Error al guardar la respuesta' });
-          }
-
-          res.json({ success: true, message: 'Respuesta guardada con éxito.' });
-      });
-  }
+      } else {
+          // Insertar una nueva respuesta
+          const insertQuery = 'INSERT INTO respuestas (id_usuario, id_pregunta, respuesta, pregunta, fecha_respuesta, id_respuesta_general) VALUES (?, ?, ?, ?, NOW(), ?)';
+          const id_respuesta_general = req.session.currentResponseGroupId || null;
+          connection.query(insertQuery, [userId, questionId, response, pregunta, id_respuesta_general], (insertError, insertResults) => {
+              if (insertError) {
+                  console.error('Error al guardar la respuesta en la base de datos:', insertError);
+                  return res.status(500).json({ success: false, message: 'Error al guardar la respuesta' });
+              }
+              if (!req.session.currentResponseGroupId) {
+                  req.session.currentResponseGroupId = insertResults.insertId;
+                  const updateGeneralQuery = 'UPDATE respuestas SET id_respuesta_general = ? WHERE id_respuesta = ?';
+                  connection.query(updateGeneralQuery, [insertResults.insertId, insertResults.insertId], (updateGeneralError) => {
+                      if (updateGeneralError) {
+                          console.error('Error al actualizar el id_respuesta_general:', updateGeneralError);
+                          return res.status(500).json({ success: false, message: 'Error al actualizar el id_respuesta_general' });
+                      }
+                      res.json({ success: true, message: 'Respuesta guardada con éxito.' });
+                  });
+              } else {
+                  res.json({ success: true, message: 'Respuesta guardada con éxito.' });
+              }
+          });
+      }
+  });
 });
+
+
 
 
 
