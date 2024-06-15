@@ -78,11 +78,44 @@ async function getCompletion(prompt) {
     return data;
 }
 
+async function getCompletionFT(prompt) {
+    const response = await fetch(`https://api.openai.com/v1/chat/completions`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${API_KEY}`,
+        },
+        body: JSON.stringify({
+            model: "ft:gpt-3.5-turbo-0125:personal::9VnmWyOF",
+            messages: [
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            max_tokens: 300,
+        }),
+    });
+    if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+    }
+    const data = await response.json();
+    return data;
+}
+
 function mostrarLoader(idGeneral) {
     const analysisContainer = document.querySelector('.analysis-container');
     analysisContainer.innerHTML = `<div class="loader"></div>`;
     setTimeout(async () => {
         await mostrarRespuesta(analysisContainer, idGeneral);
+    }, 5000);
+}
+
+function mostrarLoaderEntrenado(idGeneral) {
+    const analysisContainer = document.querySelector('.analysis-container');
+    analysisContainer.innerHTML = `<div class="loader"></div>`;
+    setTimeout(async () => {
+        await mostrarRespuestaEntrenado(analysisContainer, idGeneral);
     }, 5000);
 }
 
@@ -145,6 +178,65 @@ async function mostrarRespuesta(container, idGeneral) {
     }
 }
 
+async function mostrarRespuestaEntrenado(container, idGeneral) {
+    try {
+        const respuestas = await fetch(`/obtener-respuestas-general/${idGeneral}`).then(res => res.json());
+        const evaluaciones = [];
+
+        const descripcionImagen = "En la imagen se ve una mano que emerge del agua en señal de auxilio, mientras un grupo de personas alrededor está grabando con sus teléfonos móviles en lugar de ayudar.";
+        const descripcionVideo = "El video muestra la primera parte de la película 'Tiempos Modernos' de Charlie Chaplin, específicamente hasta el minuto 1:40.";
+        const descripcionTexto = "Extracto de la novela 'Eva Luna' de Isabel Allende: La primera vez que vi la lluvia fue una tarde de verano en un patio interior...";
+
+        for (let i = 0; i < respuestas.length; i++) {
+            const r = respuestas[i];
+            const habilidad = r.habilidad;
+
+            let descripcionContenido;
+            if (i < 5) {
+                descripcionContenido = descripcionImagen;
+            } else if (i < 10) {
+                descripcionContenido = descripcionVideo;
+            } else {
+                descripcionContenido = descripcionTexto;
+            }
+
+            const prompt = `
+                Te proporciono esta ${rubricas[habilidad]} con este 
+                Tipo de contenido: ${determinarTipoContenido(i)}
+                Descripción del contenido: ${descripcionContenido}
+                con estas 
+
+                Pregunta: ${r.pregunta}
+                y
+                Respuesta: ${r.respuesta}
+
+                Proporciona un análisis de la respuesta en base a la rubrica que te proporcione y el contenido. Utiliza el modelo entrenado.
+            `;
+
+            console.log('Prompt enviado a la API:', prompt); // Agregado para depuración
+
+            const response = await getCompletionFT(prompt);
+            if (response.choices && response.choices[0] && response.choices[0].message && response.choices[0].message.content) {
+                const evaluacion = response.choices[0].message.content.trim();
+                evaluaciones.push({
+                    id: r.id_respuesta,
+                    pregunta: r.pregunta,
+                    respuesta: r.respuesta,
+                    analisis: evaluacion,
+                    puntaje: extractScore(evaluacion)
+                });
+            } else {
+                throw new Error('Respuesta de la API no válida');
+            }
+        }
+
+        renderEvaluaciones(container, evaluaciones);
+    } catch (error) {
+        console.error('Error al obtener la evaluación:', error);
+        container.innerHTML = '<div class="error-message">Error al obtener la evaluación</div>';
+    }
+}
+
 function determinarTipoContenido(index) {
     if (index < 5) return "Imagen";
     else if (index < 10) return "Video";
@@ -155,6 +247,12 @@ function extractScore(evaluacion) {
     const scoreRegex = /Puntaje: (\d+)/i;
     const match = evaluacion.match(scoreRegex);
     return match ? match[1] : 'N/A';
+}
+
+function downloadTableAsXLSX() {
+    const table = document.querySelector('.table-auto');
+    const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
+    XLSX.writeFile(wb, 'analisis_respuestas.xlsx');
 }
 
 function renderEvaluaciones(container, evaluaciones) {
@@ -184,8 +282,15 @@ function renderEvaluaciones(container, evaluaciones) {
                     ${tableRows}
                 </tbody>
             </table>
+            <button id="downloadBtn" class="download-btn">Descargar XLSX</button>
         </div>
     `;
+
+    // Añadir el event listener para el botón de descarga
+    const downloadBtn = document.getElementById('downloadBtn');
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', downloadTableAsXLSX);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

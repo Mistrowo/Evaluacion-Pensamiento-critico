@@ -223,3 +223,18 @@ body {
     line-height: 1.6;
     color: #333333;
 }
+
+
+.download-btn {
+    margin: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.download-btn:hover {
+    background-color: #45a049;
+}
