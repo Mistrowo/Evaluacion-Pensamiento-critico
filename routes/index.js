@@ -251,7 +251,6 @@ router.post('/save-response', isAuthenticated, (req, res) => {
       }
 
       if (checkResults.length > 0) {
-          // Actualizar la respuesta existente
           const updateQuery = 'UPDATE respuestas SET respuesta = ?, fecha_respuesta = NOW() WHERE id_respuesta = ?';
           connection.query(updateQuery, [response, checkResults[0].id_respuesta], (updateError) => {
               if (updateError) {
@@ -261,7 +260,6 @@ router.post('/save-response', isAuthenticated, (req, res) => {
               res.json({ success: true, message: 'Respuesta actualizada con éxito.' });
           });
       } else {
-          // Insertar una nueva respuesta
           const insertQuery = 'INSERT INTO respuestas (id_usuario, id_pregunta, respuesta, pregunta, fecha_respuesta, id_respuesta_general) VALUES (?, ?, ?, ?, NOW(), ?)';
           const id_respuesta_general = req.session.currentResponseGroupId || null;
           connection.query(insertQuery, [userId, questionId, response, pregunta, id_respuesta_general], (insertError, insertResults) => {
@@ -290,18 +288,18 @@ router.post('/save-response', isAuthenticated, (req, res) => {
 
 
 
-
 router.post('/agregar-usuario', isAuthenticated, (req, res) => {
-  const { nombre, contrasena, establecimiento, rol } = req.body;
-  const query = 'INSERT INTO usuarios (nombre, contraseña, establecimiento, rol) VALUES (?, ?, ?, ?)';
-  connection.query(query, [nombre, contrasena, establecimiento, rol], (error, result) => {
-    if (error) {
-      console.error('Error al agregar el usuario:', error);
-      return res.status(500).json({ error: 'Error interno del servidor' });
-    }
-    res.status(200).json({ message: 'Usuario agregado correctamente' });
+  const { nombre, contrasena, establecimiento, rol, curso } = req.body;
+  const query = 'INSERT INTO usuarios (nombre, contraseña, establecimiento, rol, curso) VALUES (?, ?, ?, ?, ?)';
+  connection.query(query, [nombre, contrasena, establecimiento, rol, curso], (error, result) => {
+      if (error) {
+          console.error('Error al agregar el usuario:', error);
+          return res.status(500).json({ error: 'Error interno del servidor' });
+      }
+      res.status(200).json({ message: 'Usuario agregado correctamente' });
   });
 });
+
 
 router.post('/agregar-pregunta', isAuthenticated, (req, res) => {
   const { habilidad, pregunta } = req.body;
@@ -314,7 +312,6 @@ router.post('/agregar-pregunta', isAuthenticated, (req, res) => {
     res.status(200).json({ message: 'Pregunta agregada correctamente' });
   });
 });
-// Ruta para actualizar un usuario
 router.put('/actualizar-usuario/:id', isAuthenticated, (req, res) => {
   const { id } = req.params;
   const { nombre, contrasena, rol } = req.body;

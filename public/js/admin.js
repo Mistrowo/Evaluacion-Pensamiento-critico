@@ -251,6 +251,46 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // Handle delete user button click
+    $(document).on('click', '.delete-user', function() {
+        var userId = $(this).data('user-id');
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarlo!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `/eliminar-usuario/${userId}`,
+                    type: 'DELETE',
+                    success: function() {
+                        Swal.fire(
+                            'Eliminado!',
+                            'El usuario ha sido eliminado.',
+                            'success'
+                        );
+                        $('#modalEliminar').modal('hide');
+                        location.reload();
+                    },
+                    error: function(error) {
+                        Swal.fire(
+                            'Error!',
+                            'Hubo un problema al eliminar el usuario.',
+                            'error'
+                        );
+                        console.log(error);
+                    }
+                });
+            }
+        });
+    });
+    
 });
 
 function eliminarPregunta(id) {
@@ -291,15 +331,16 @@ function eliminarPregunta(id) {
 
 function agregarUsuario() {
     const nombre = $('#nombreUsuario').val();
-    const contrasena = $('#contrasenaUsuario').val();
+    const contrasena = $('#nombreUsuario').val();
     const establecimiento = $('#establecimientoUsuario').val();
     const rol = $('#rolUsuario').val();
+    const curso = $('#cursoUsuario').val();
 
-    if (nombre && contrasena && establecimiento && rol) {
+    if (nombre && contrasena && establecimiento && rol && curso) {
         $.ajax({
             url: '/agregar-usuario',
             type: 'POST',
-            data: { nombre, contrasena, establecimiento, rol },
+            data: { nombre, contrasena, establecimiento, rol, curso },
             success: function(response) {
                 Swal.fire(
                     '¡Agregado!',

@@ -88,6 +88,7 @@
             </div>
         </div>
     </div>
+    
 
     <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="modalAgregarLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -113,9 +114,13 @@
                         <div class="mb-3">
                             <label for="rolUsuario" class="form-label">Rol</label>
                             <select class="form-control" id="rolUsuario">
-                                <option value="1">Admin</option>
-                                <option value="2">Usuario</option>
+                                <option value="Estudiante">Estudiante</option>
+                                <option value="Profesora">Profesor</option>
                             </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cursoUsuario" class="form-label">Curso</label>
+                            <input type="text" class="form-control" id="cursoUsuario">
                         </div>
                         <button type="button" class="btn btn-primary" onclick="agregarUsuario()">Agregar</button>
                     </form>
@@ -123,6 +128,7 @@
             </div>
         </div>
     </div>
+    
 
     <div class="modal fade" id="modalActualizarPreguntas" tabindex="-1" aria-labelledby="modalActualizarPreguntasLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -238,8 +244,8 @@
                         <div class="mb-3">
                             <label for="editUserRol" class="form-label">Rol</label>
                             <select class="form-control" id="editUserRol">
-                                <option value="1">Admin</option>
-                                <option value="2">Usuario</option>
+                                <option value="Profesora">Profesor</option>
+                                <option value="Estudiante">Estudiante</option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary">Actualizar</button>

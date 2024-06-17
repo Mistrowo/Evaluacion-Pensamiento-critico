@@ -3,8 +3,8 @@ const API_KEY = "sk-proj-AMvrv5XIi1MrmCWM6d45T3BlbkFJX8JMaYag5oRBhjQWnisc";  // 
 const rubricas = {
     "Interpretación": `
     Habilidad
-    2 puntos
-    1 punto
+    3-4 puntos
+    1-2 puntos
     0 puntos
     Interpretación
     Expresa una opinión fundamentada sobre el contenido/impresión general.
@@ -13,8 +13,8 @@ const rubricas = {
     `,
     "Análisis": `
     Habilidad
-    2 puntos
-    1 punto
+    3-4 puntos
+    1-2 puntos
     0 puntos
     Análisis
     Identifica acertadamente las ideas principales y secundarias.
@@ -23,8 +23,8 @@ const rubricas = {
     `,
     "Inferencia": `
     Habilidad
-    2 puntos
-    1 punto
+    3-4 puntos
+    1-2 puntos
     0 puntos
     Inferencia
     Infiere apropiadamente el mensaje/intenciones subyacentes.
@@ -33,8 +33,8 @@ const rubricas = {
     `,
     "Evaluación": `
     Habilidad
-    2 puntos
-    1 punto
+    3-4 puntos
+    1-2 puntos
     0 puntos
     Evaluación
     Evalúa críticamente si el contenido logra su objetivo, con argumentos sólidos.
@@ -43,8 +43,8 @@ const rubricas = {
     `,
     "Metacognición": `
     Habilidad
-    2 puntos
-    1 punto
+    3-4 puntos
+    1-2 puntos
     0 puntos
     Metacognición
     Explica apropiada y detalladamente sus pensamientos, reflexiones personales.
@@ -86,7 +86,7 @@ async function getCompletionFT(prompt) {
             Authorization: `Bearer ${API_KEY}`,
         },
         body: JSON.stringify({
-            model: "ft:gpt-3.5-turbo-0125:personal::9VnmWyOF",
+            model: "ft:gpt-3.5-turbo-0125:personal::9Y1XTKgR:ckpt-step-246",
             messages: [
                 {
                     "role": "user",
@@ -105,7 +105,7 @@ async function getCompletionFT(prompt) {
 
 function mostrarLoader(idGeneral) {
     const analysisContainer = document.querySelector('.analysis-container');
-    analysisContainer.innerHTML = `<div class="loader"></div>`;
+    analysisContainer.innerHTML = `<div class="loading-text">CARGANDO ANALISIS MODELO CHATGPT...</div>`;
     setTimeout(async () => {
         await mostrarRespuesta(analysisContainer, idGeneral);
     }, 5000);
@@ -113,10 +113,20 @@ function mostrarLoader(idGeneral) {
 
 function mostrarLoaderEntrenado(idGeneral) {
     const analysisContainer = document.querySelector('.analysis-container');
-    analysisContainer.innerHTML = `<div class="loader"></div>`;
+    analysisContainer.innerHTML = `<div class="loading-text">CARGANDO ANALISIS MODELO ENTRENADO...</div>`;
     setTimeout(async () => {
         await mostrarRespuestaEntrenado(analysisContainer, idGeneral);
     }, 5000);
+}
+
+function mapearHabilidad(pregunta) {
+    const preguntaLimpia = pregunta.replace(/Pregunta \d+: /, '').trim();
+    if (preguntaLimpia.includes("¿Cómo describirías")) return "Interpretación";
+    if (preguntaLimpia.includes("¿Qué mensaje o significado puedes encontrar")) return "Análisis";
+    if (preguntaLimpia.includes("¿A qué conclusiones se pueden llegar")) return "Inferencia";
+    if (preguntaLimpia.includes("¿Cómo evaluarías lo que aprendiste")) return "Evaluación";
+    if (preguntaLimpia.includes("¿Qué preguntas te hiciste")) return "Metacognición";
+    return null;
 }
 
 async function mostrarRespuesta(container, idGeneral) {
@@ -130,7 +140,12 @@ async function mostrarRespuesta(container, idGeneral) {
 
         for (let i = 0; i < respuestas.length; i++) {
             const r = respuestas[i];
-            const habilidad = r.habilidad;
+            const habilidad = mapearHabilidad(r.pregunta);
+
+            if (!habilidad) {
+                console.error(`No se pudo determinar la habilidad para la pregunta: ${r.pregunta}`);
+                continue;
+            }
 
             let descripcionContenido;
             if (i < 5) {
@@ -141,20 +156,29 @@ async function mostrarRespuesta(container, idGeneral) {
                 descripcionContenido = descripcionTexto;
             }
 
+            if (!rubricas[habilidad]) {
+                console.error(`Habilidad ${habilidad} no encontrada en rubricas.`);
+                continue;
+            }
+
             const prompt = `
-                Te proporciono esta ${rubricas[habilidad]} con este 
+                Eres un experto en análisis del pensamiento crítico. Te proporcionaré una rúbrica para evaluar una respuesta.
+
+                Rúbrica:
+                ${rubricas[habilidad]}
+
                 Tipo de contenido: ${determinarTipoContenido(i)}
                 Descripción del contenido: ${descripcionContenido}
-                con estas 
 
                 Pregunta: ${r.pregunta}
-                y
-                Respuesta: ${r.respuesta}
+                Respuesta del estudiante: ${r.respuesta}
 
-                Proporciona un análisis de la respuesta en base a la rubrica que te proporcione y el contenido. Utiliza el modelo entrenado.
+                Utilizando la rúbrica proporcionada, analiza la respuesta del estudiante y asigna un puntaje en el rango de 0 a 4. Explica brevemente por qué asignaste ese puntaje, mencionando elementos específicos de la respuesta y la rúbrica.
+
+                Recuerda ser detallado y justificado en tu evaluación.
             `;
 
-            console.log('Prompt enviado a la API:', prompt); // Agregado para depuración
+            console.log('Prompt enviado a la API:', prompt);
 
             const response = await getCompletion(prompt);
             if (response.choices && response.choices[0] && response.choices[0].message && response.choices[0].message.content) {
@@ -189,7 +213,12 @@ async function mostrarRespuestaEntrenado(container, idGeneral) {
 
         for (let i = 0; i < respuestas.length; i++) {
             const r = respuestas[i];
-            const habilidad = r.habilidad;
+            const habilidad = mapearHabilidad(r.pregunta);
+
+            if (!habilidad) {
+                console.error(`No se pudo determinar la habilidad para la pregunta: ${r.pregunta}`);
+                continue;
+            }
 
             let descripcionContenido;
             if (i < 5) {
@@ -200,20 +229,29 @@ async function mostrarRespuestaEntrenado(container, idGeneral) {
                 descripcionContenido = descripcionTexto;
             }
 
+            if (!rubricas[habilidad]) {
+                console.error(`Habilidad ${habilidad} no encontrada en rubricas.`);
+                continue;
+            }
+
             const prompt = `
-                Te proporciono esta ${rubricas[habilidad]} con este 
+                Eres un experto en análisis del pensamiento crítico. Te proporcionaré una rúbrica para evaluar una respuesta.
+
+                Rúbrica:
+                ${rubricas[habilidad]}
+
                 Tipo de contenido: ${determinarTipoContenido(i)}
                 Descripción del contenido: ${descripcionContenido}
-                con estas 
 
                 Pregunta: ${r.pregunta}
-                y
-                Respuesta: ${r.respuesta}
+                Respuesta del estudiante: ${r.respuesta}
 
-                Proporciona un análisis de la respuesta en base a la rubrica que te proporcione y el contenido. Utiliza el modelo entrenado.
+                Utilizando la rúbrica proporcionada, analiza la respuesta del estudiante y asigna un puntaje en el rango de 0 a 4. Explica brevemente por qué asignaste ese puntaje, mencionando elementos específicos de la respuesta y la rúbrica.
+
+                Recuerda ser detallado y justificado en tu evaluación.
             `;
 
-            console.log('Prompt enviado a la API:', prompt); // Agregado para depuración
+            console.log('Prompt enviado a la API:', prompt);
 
             const response = await getCompletionFT(prompt);
             if (response.choices && response.choices[0] && response.choices[0].message && response.choices[0].message.content) {
