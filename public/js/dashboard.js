@@ -23,9 +23,9 @@ const activities = [
     },
     {
         type: "text",
-        content: ` La primera vez que vi la lluvia fue una tarde de verano en un patio interior. Ese patio era un mundo completo, con una fuente de azulejos en el centro, arriates de flores y un viejo naranjo con el tronco blanco de cal. Yo me hallaba fascinada contemplando aquel árbol tan raro, cuyas hojas eran como de laca verde y tenía algunas frutas tan grandes y redondas como bolas de billar. De pronto escuché un ruido ensordecedor sobre los techos de las casas vecinas, el cielo se oscureció y empezaron a caer gotas de agua fría, después fue un diluvio.
+        content: ` La primera vez que vi la lluvia fue una tarde de verano en un patio interior. Ese patio era un mundo completo, con una fuente de pajaros en el centro, muchas flores y un viejo naranjo con el tronco blanco. Yo me hallaba contenta contemplando aquel árbol tan raro, cuyas hojas eran como una sustancia verde y tenía algunas frutas tan grandes y redondas como bolas de billar. De pronto escuché un ruido  sobre los techos de las casas vecinas, el cielo se oscureció y empezaron a caer gotas de agua fría, después fue un diluvio.
     
-    Aquello me pareció extraordinario, un prodigio aterrador y maravilloso. El patio se inundó de inmediato, los arriates se convirtieron en pequeños lagos, el naranjo sacudía sus ramas empapadas y enormes gotas rebotaban en el suelo y sobre la fuente. Me acurruqué en un rincón, sollozando de pánico porque creí que el mundo se estaba disolviendo. Mi madre me tomó en sus brazos para tranquilizarme, me asomó al aguacero y me dijo que no tuviera miedo, que eso era sólo la lluvia, un fenómeno natural tan beneficioso como el sol.
+    Aquello me pareció extraordinario, un sonido aterrador y maravilloso. El patio se inundó de inmediato, los caminos se convirtieron en pequeños lagos, el naranjo sacudía sus ramas mojadas y enormes gotas rebotaban en el suelo y sobre la fuente. Me acurruqué en un rincón, me encontraba con miedo porque creí que el mundo se estaba rompiendo. Mi madre me tomó en sus brazos para tranquilizarme, me asomó al patio y me dijo que no tuviera miedo, que eso era sólo la lluvia, un fenómeno natural tan lindo como el sol.
     
     `,
         questions: [

@@ -19,33 +19,39 @@ const isAuthenticated = (req, res, next) => {
   }
 };
 
-
 router.get('/', (req, res) => {
   connection.query(
-    `SELECT DISTINCT establecimiento, curso
-     FROM usuarios`,
+    `SELECT establecimiento, curso
+     FROM usuarios
+     GROUP BY establecimiento, curso`,
     (error, results) => {
       if (error) {
         console.error('Error al consultar la base de datos:', error);
         return res.render('index', { establecimientos: [] });
       }
 
-      // Agrupar los cursos por establecimiento
+      // Agrupar los cursos por establecimiento sin duplicados
       const establecimientos = {};
       results.forEach(row => {
         const { establecimiento, curso } = row;
         if (!establecimientos[establecimiento]) {
           establecimientos[establecimiento] = {
             nombre: establecimiento,
-            cursos: []
+            cursos: new Set() // Usar un Set en lugar de un arreglo para almacenar cursos únicos
           };
         }
         if (curso) {
-          establecimientos[establecimiento].cursos.push(curso);
+          establecimientos[establecimiento].cursos.add(curso); // Agregar el curso al Set
         }
       });
 
-      res.render('index', { establecimientos: Object.values(establecimientos) });
+      // Convertir los Sets de cursos a arreglos
+      const establecimientosArray = Object.values(establecimientos).map(establecimiento => ({
+        ...establecimiento,
+        cursos: Array.from(establecimiento.cursos)
+      }));
+
+      res.render('index', { establecimientos: establecimientosArray });
     }
   );
 });
@@ -56,6 +62,14 @@ router.get('/dashboard', isAuthenticated, (req, res) => {
   const usuario = req.session.usuario.nombre;
   const fecha = new Date().toLocaleDateString();
   res.render('dashboard', { usuario, fecha });
+});
+
+
+router.get('/panel', isAuthenticated, (req, res) => {
+  console.log(req.session.usuario);  
+  const usuario = req.session.usuario.nombre;
+  const fecha = new Date().toLocaleDateString();
+  res.render('panel', { usuario, fecha });
 });
 
 

@@ -1,59 +1,59 @@
 const API_KEY = "sk-proj-AMvrv5XIi1MrmCWM6d45T3BlbkFJX8JMaYag5oRBhjQWnisc";  // Reemplaza con tu clave API
-
 const rubricas = {
     "Interpretación": `
     Habilidad
-    3-4 puntos
-    1-2 puntos
+    2 puntos
+    1 puntos
     0 puntos
     Interpretación
-    Expresa una opinión fundamentada sobre el contenido/impresión general.
-    Expresa una opinión superficial o simplista.
-    No logra expresar una opinión coherente.
+    Describe la actividad  con al menos dos detalles, incluyendo elementos específicos (personajes, acciones, entorno).
+    Describe la actividad, con solo 1 detalle.
+    No logra describir la actividad  de manera clara.
     `,
     "Análisis": `
     Habilidad
-    3-4 puntos
-    1-2 puntos
+    2 puntos
+    1 puntos
     0 puntos
     Análisis
-    Identifica acertadamente las ideas principales y secundarias.
-    Identifica algunas ideas principales/secundarias de manera parcial o confusa.
-    No logra identificar ideas principales/secundarias relevantes.
+    Encuentra y explica bien el mensaje o significado de la actividad.
+    Encuentra el mensaje o significado, pero no lo explica bien..
+    No logra encontrar el mensaje o significado..
     `,
     "Inferencia": `
     Habilidad
-    3-4 puntos
-    1-2 puntos
+    2 puntos
+    1 puntos
     0 puntos
     Inferencia
-    Infiere apropiadamente el mensaje/intenciones subyacentes.
-    Realiza algunas inferencias básicas o poco fundamentadas.
-    No va más allá de lo literal, sin hacer inferencias.
+    Hace  una conclusion clara y bien fundamentada basada en detalles de la actividad.
+    Hace una conclusion, pero no  está bien fundamentada.
+    No hace inferencias.
     `,
     "Evaluación": `
     Habilidad
-    3-4 puntos
-    1-2 puntos
+    2 puntos
+    1 puntos
     0 puntos
     Evaluación
-    Evalúa críticamente si el contenido logra su objetivo, con argumentos sólidos.
-    Intenta evaluar pero los argumentos son débiles o simplistas.
-    No logra hacer una evaluación crítica.
+    Evalúa lo que aprendio y da un ejemplo de como aplicarlo en la vida cotidiana o en otras situaciones
+    Solo evalua lo que aprendio o solo da un ejemplo sin argumentar lo que aprendio .
+    No logra hacer una evaluación.
     `,
     "Metacognición": `
     Habilidad
-    3-4 puntos
-    1-2 puntos
+    2 puntos
+    1 puntos
     0 puntos
     Metacognición
-    Explica apropiada y detalladamente sus pensamientos, reflexiones personales.
-    Explica vagamente algunos elementos metacognitivos básicos.
-    No demuestra conciencia metacognitiva sobre su experiencia.
+    Realiza preguntas y responde si se respondieron durante la actividad.
+    Solo realiza la pregunta sin responder si se respondio durante la actividad.
+    No hizo nada .
     `
 };
 
 async function getCompletion(prompt) {
+    const start = performance.now();
     const response = await fetch(`https://api.openai.com/v1/chat/completions`, {
         method: "POST",
         headers: {
@@ -71,6 +71,10 @@ async function getCompletion(prompt) {
             max_tokens: 300,
         }),
     });
+    const end = performance.now();
+    const duration = end - start;
+    console.log(`Tiempo de inferencia para gpt-3.5-turbo: ${duration}ms`);
+
     if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
     }
@@ -79,6 +83,7 @@ async function getCompletion(prompt) {
 }
 
 async function getCompletionFT(prompt) {
+    const start = performance.now();
     const response = await fetch(`https://api.openai.com/v1/chat/completions`, {
         method: "POST",
         headers: {
@@ -96,6 +101,10 @@ async function getCompletionFT(prompt) {
             max_tokens: 300,
         }),
     });
+    const end = performance.now();
+    const duration = end - start;
+    console.log(`Tiempo de inferencia para modelo fine-tuned: ${duration}ms`);
+
     if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
     }
@@ -173,7 +182,7 @@ async function mostrarRespuesta(container, idGeneral) {
                 Pregunta: ${r.pregunta}
                 Respuesta del estudiante: ${r.respuesta}
 
-                Utilizando la rúbrica proporcionada, analiza la respuesta del estudiante y asigna un puntaje en el rango de 0 a 4. Explica brevemente por qué asignaste ese puntaje, mencionando elementos específicos de la respuesta y la rúbrica.
+                Utilizando la rúbrica proporcionada, analiza la respuesta del estudiante y asigna un puntaje en el rango de 0 a 3. El análisis debe comenzar con el puntaje asignado en el formato "Puntaje: X puntos" donde X es el puntaje que asignaste. Explica brevemente por qué asignaste ese puntaje, mencionando elementos específicos de la respuesta y la rúbrica.
 
                 Recuerda ser detallado y justificado en tu evaluación.
             `;
@@ -246,7 +255,7 @@ async function mostrarRespuestaEntrenado(container, idGeneral) {
                 Pregunta: ${r.pregunta}
                 Respuesta del estudiante: ${r.respuesta}
 
-                Utilizando la rúbrica proporcionada, analiza la respuesta del estudiante y asigna un puntaje en el rango de 0 a 4. Explica brevemente por qué asignaste ese puntaje, mencionando elementos específicos de la respuesta y la rúbrica.
+                Utilizando la rúbrica proporcionada, analiza la respuesta del estudiante y asigna un puntaje en el rango de 0 a 3. El análisis debe comenzar con el puntaje asignado en el formato "Puntaje: X puntos" donde X es el puntaje que asignaste. Explica brevemente por qué asignaste ese puntaje, mencionando elementos específicos de la respuesta y la rúbrica.
 
                 Recuerda ser detallado y justificado en tu evaluación.
             `;

@@ -1,0 +1,183 @@
+body {
+    background-image: url('/images/fondo.jpeg');
+    background-size: cover;
+    font-family: 'Roboto', sans-serif;
+    color: #4D4D4D;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.user-info {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: rgba(255, 236, 219, 0.8);
+    border-radius: 10px;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.logout-btn {
+    position: absolute;
+    top: 70px;
+    right: 2px;
+    padding: 5px 10px;
+    background-color: #FF6B35;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #FF8C66;
+}
+
+.card {
+    max-width: 700px; /* Ajusta este valor según sea necesario */
+    width: 80%;
+    max-height: 80vh; /* Ajusta este valor según sea necesario */
+    overflow-y: auto;
+    background-color: rgba(255, 236, 219, 0.8);
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    margin-top: 50px; /* Añade este margen superior para mover la carta hacia abajo */
+}
+
+.content {
+    padding: 20px;
+}
+
+.title {
+    font-family: 'Pacifico', cursive;
+    font-size: 28px;
+    color: #FF6B35;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.instructions {
+    text-align: left;
+    margin-bottom: 30px;
+}
+
+.instructions p,
+.instructions ul,
+.instructions ol {
+    font-size: 14px;
+    text-align: justify;
+    line-height: 1.6;
+}
+
+.instructions p strong {
+    color: #FF6B35; /* Color del texto resaltado */
+}
+
+.instructions ul,
+.instructions ol {
+    padding-left: 20px;
+}
+
+.instructions li {
+    margin-bottom: 10px;
+}
+
+.comenzar-btn {
+    position: relative;
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #fff;
+    background-color: transparent;
+    border: none;
+    overflow: hidden;
+    transition: color 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.comenzar-btn .btn-content {
+    position: relative;
+    z-index: 1;
+}
+
+.comenzar-btn .btn-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    background-color: #FF6B35;
+    border-radius: 50%;
+    transition: width 0.5s ease, height 0.5s ease;
+}
+
+.comenzar-btn:hover {
+    color: #4D4D4D;
+}
+
+.comenzar-btn:hover .btn-bg {
+    width: 200%;
+    height: 200%;
+}
+
+.motivation-quote {
+    font-style: italic;
+    color: #FF6B35;
+}
+
+.leaf {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-image: url('/images/leaf.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    animation: leaf-fall 5s linear infinite;
+}
+
+@keyframes leaf-fall {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, 1000%) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.bubble {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    animation: bubble-float linear infinite;
+}
+
+@keyframes bubble-float {
+    0% {
+        transform: translateY(100vh);
+    }
+    100% {
+        transform: translateY(-100%);
+    }
+}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Panel</title>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/css/panel.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico|Roboto&display=swap">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/flowbite@1.4.7/dist/flowbite.js"></script>
+    <link rel="icon" href="/images/logoapp.jpg" type="image/x-icon">
+</head>
+<body>
+    <div id="bubbles-container"></div>
+    <div class="leaf" style="top: 10%; left: 20%;"></div>
+    <div class="leaf" style="top: 30%; left: 70%;"></div>
+    <div class="leaf" style="top: 60%; left: 40%;"></div>
+
+    <div class="user-info">
+        Usuario: <%= usuario %><br>
+        Fecha: <%= fecha %>
+        <button class="logout-btn" id="logoutBtn">Cerrar sesión</button>
+    </div>
+
+    <div class="card">
+        <div class="content">
+            <h1 class="title">FORMULARIO DE ASENTIMIENTO PARA ENCUESTA A MENOR DE EDAD</h1>
+            <p class="subtitle">Avanzando la evaluación y el desarrollo de las habilidades de comunicación, pensamiento crítico, colaboración y creatividad mediante la inteligencia artificial</p>
+
+            <div class="instructions">
+                <p>Estimado estudiante:</p>
+                <p>El propósito de este documento es entregarte toda la información necesaria para que puedas decidir si quieres participar o no en un proyecto de investigación que estamos realizando en tu escuela. El objetivo de este estudio es diseñar, implementar y estudiar actividades digitales que utilizan tecnología para conocer cuáles son tus habilidades de colaboración, comunicación, creatividad y pensamiento crítico, y ayudarte a desarrollarlas.</p>
+                <p>Antes de tomar esta decisión, es importante que sepas lo siguiente:</p>
+                <ul>
+                    <li>Tu participación en este estudio ha sido autorizada por tus padres; sin embargo, si tú prefieres no participar, nadie te puede obligar a hacerlo.</li>
+                    <li>Tu participación consiste en realizar una serie de actividades digitales, como simulaciones y videojuegos, que registrarán tus respuestas y cómo interactúas con ellas. Estas actividades durarán aproximadamente 1 hora y media y se realizarán en tu escuela. Nadie (ni tus padres, ni tus profesores, ni tus compañeros) conocerá tus respuestas: es decir, tu participación será confidencial, sin que se dé a conocer tu nombre. Tu participación es voluntaria, puedes no contestar ciertas preguntas o retirarte en cualquier momento; el que tú decidas no participar o no contestar todas las preguntas no tendrá ninguna consecuencia para ti; ni tus padres ni tus profesores o compañeros sabrán si tú decidiste participar o no en el estudio.</li>
+                    <li>Tus respuestas serán utilizadas únicamente para los fines de esta investigación.</li>
+                    <li>Tu participación es voluntaria; puedes decidir no participar en cualquier momento, y si eliges no participar o no contestar todas las preguntas, no tendrá ninguna consecuencia para ti. Ni tus padres, ni tus profesores, ni tus compañeros sabrán si decidiste participar o no en el estudio.</li>
+                    <li>Es importante que sepas que no hay beneficios personales para ti al participar en este proyecto, pero tampoco tendrás molestias, más allá de estar ese tiempo realizando las actividades digitales en el computador o tablet.</li>
+                    <li>En el caso que tengas más preguntas sobre esta investigación, se las puedes hacer a la persona que está dirigiendo la actividad, o puedes pedirle a tus padres que te ayuden a contactarte con la Investigadora Responsable del estudio, quien con mucho gusto responderá tus dudas.</li>
+                </ul>
+            </div>
+
+            <a href="/dashboard" class="comenzar-btn">
+                <span class="btn-content">Comenzar</span>
+                <div class="btn-bg"></div>
+            </a>
+
+            <p class="motivation-quote">"El aprendizaje nunca termina, es una aventura de por vida."</p>
+        </div>
+    </div>
+
+    <script src="/js/instructivo.js"></script>
+    <script>
+        function createBubble() {
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+            bubble.style.left = `${Math.random() * 100}vw`;
+            bubble.style.animationDuration = `${Math.random() * 3 + 2}s`;
+            bubble.style.animationDelay = `${Math.random() * 5}s`;
+            document.getElementById('bubbles-container').appendChild(bubble);
+
+            setTimeout(() => {
+                bubble.remove();
+            }, 8000);
+        }
+
+        setInterval(createBubble, 300);
+    </script>
+</body>
+</html>
