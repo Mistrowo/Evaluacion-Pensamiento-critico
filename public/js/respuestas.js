@@ -1,3 +1,4 @@
+
 const API_KEY = "sk-proj-AMvrv5XIi1MrmCWM6d45T3BlbkFJX8JMaYag5oRBhjQWnisc";  // Reemplaza con tu clave API
 const rubricas = {
     "Interpretación": `
@@ -6,9 +7,9 @@ const rubricas = {
     1 puntos
     0 puntos
     Interpretación
-    Describe la actividad  con al menos dos detalles, incluyendo elementos específicos (personajes, acciones, entorno).
+    Describe la actividad con al menos dos detalles, incluyendo elementos específicos (personajes, acciones, entorno).
     Describe la actividad, con solo 1 detalle.
-    No logra describir la actividad  de manera clara.
+    No logra describir la actividad de manera clara.
     `,
     "Análisis": `
     Habilidad
@@ -17,8 +18,8 @@ const rubricas = {
     0 puntos
     Análisis
     Encuentra y explica bien el mensaje o significado de la actividad.
-    Encuentra el mensaje o significado, pero no lo explica bien..
-    No logra encontrar el mensaje o significado..
+    Encuentra el mensaje o significado, pero no lo explica bien.
+    No logra encontrar el mensaje o significado.
     `,
     "Inferencia": `
     Habilidad
@@ -26,8 +27,8 @@ const rubricas = {
     1 puntos
     0 puntos
     Inferencia
-    Hace  una conclusion clara y bien fundamentada basada en detalles de la actividad.
-    Hace una conclusion, pero no  está bien fundamentada.
+    Hace una conclusión clara y bien fundamentada basada en detalles de la actividad.
+    Hace una conclusión, pero no está bien fundamentada.
     No hace inferencias.
     `,
     "Evaluación": `
@@ -36,8 +37,8 @@ const rubricas = {
     1 puntos
     0 puntos
     Evaluación
-    Evalúa lo que aprendio y da un ejemplo de como aplicarlo en la vida cotidiana o en otras situaciones
-    Solo evalua lo que aprendio o solo da un ejemplo sin argumentar lo que aprendio .
+    Evalúa lo que aprendió y da un ejemplo de cómo aplicarlo en la vida cotidiana o en otras situaciones.
+    Solo evalúa lo que aprendió o solo da un ejemplo sin argumentar lo que aprendió.
     No logra hacer una evaluación.
     `,
     "Metacognición": `
@@ -47,13 +48,12 @@ const rubricas = {
     0 puntos
     Metacognición
     Realiza preguntas y responde si se respondieron durante la actividad.
-    Solo realiza la pregunta sin responder si se respondio durante la actividad.
-    No hizo nada .
+    Solo realiza la pregunta sin responder si se respondió durante la actividad.
+    No hizo nada.
     `
 };
 
 async function getCompletion(prompt) {
-    const start = performance.now();
     const response = await fetch(`https://api.openai.com/v1/chat/completions`, {
         method: "POST",
         headers: {
@@ -71,9 +71,6 @@ async function getCompletion(prompt) {
             max_tokens: 300,
         }),
     });
-    const end = performance.now();
-    const duration = end - start;
-    console.log(`Tiempo de inferencia para gpt-3.5-turbo: ${duration}ms`);
 
     if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
@@ -83,7 +80,6 @@ async function getCompletion(prompt) {
 }
 
 async function getCompletionFT(prompt) {
-    const start = performance.now();
     const response = await fetch(`https://api.openai.com/v1/chat/completions`, {
         method: "POST",
         headers: {
@@ -101,9 +97,6 @@ async function getCompletionFT(prompt) {
             max_tokens: 300,
         }),
     });
-    const end = performance.now();
-    const duration = end - start;
-    console.log(`Tiempo de inferencia para modelo fine-tuned: ${duration}ms`);
 
     if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
@@ -114,7 +107,7 @@ async function getCompletionFT(prompt) {
 
 function mostrarLoader(idGeneral) {
     const analysisContainer = document.querySelector('.analysis-container');
-    analysisContainer.innerHTML = `<div class="loading-text">CARGANDO ANALISIS MODELO CHATGPT...</div>`;
+    analysisContainer.innerHTML = `<div class="loading-text">CARGANDO PUNTAJE MODELO CHATGPT...</div>`;
     setTimeout(async () => {
         await mostrarRespuesta(analysisContainer, idGeneral);
     }, 5000);
@@ -122,7 +115,7 @@ function mostrarLoader(idGeneral) {
 
 function mostrarLoaderEntrenado(idGeneral) {
     const analysisContainer = document.querySelector('.analysis-container');
-    analysisContainer.innerHTML = `<div class="loading-text">CARGANDO ANALISIS MODELO ENTRENADO...</div>`;
+    analysisContainer.innerHTML = `<div class="loading-text">CARGANDO PUNTAJE MODELO ENTRENADO...</div>`;
     setTimeout(async () => {
         await mostrarRespuestaEntrenado(analysisContainer, idGeneral);
     }, 5000);
@@ -139,13 +132,10 @@ function mapearHabilidad(pregunta) {
 }
 
 async function mostrarRespuesta(container, idGeneral) {
+    const start = performance.now();
     try {
         const respuestas = await fetch(`/obtener-respuestas-general/${idGeneral}`).then(res => res.json());
         const evaluaciones = [];
-
-        const descripcionImagen = "En la imagen se ve una mano que emerge del agua en señal de auxilio, mientras un grupo de personas alrededor está grabando con sus teléfonos móviles en lugar de ayudar.";
-        const descripcionVideo = "El video muestra la primera parte de la película 'Tiempos Modernos' de Charlie Chaplin, específicamente hasta el minuto 1:40.";
-        const descripcionTexto = "Extracto de la novela 'Eva Luna' de Isabel Allende: La primera vez que vi la lluvia fue una tarde de verano en un patio interior...";
 
         for (let i = 0; i < respuestas.length; i++) {
             const r = respuestas[i];
@@ -154,15 +144,6 @@ async function mostrarRespuesta(container, idGeneral) {
             if (!habilidad) {
                 console.error(`No se pudo determinar la habilidad para la pregunta: ${r.pregunta}`);
                 continue;
-            }
-
-            let descripcionContenido;
-            if (i < 5) {
-                descripcionContenido = descripcionImagen;
-            } else if (i < 10) {
-                descripcionContenido = descripcionVideo;
-            } else {
-                descripcionContenido = descripcionTexto;
             }
 
             if (!rubricas[habilidad]) {
@@ -175,9 +156,6 @@ async function mostrarRespuesta(container, idGeneral) {
 
                 Rúbrica:
                 ${rubricas[habilidad]}
-
-                Tipo de contenido: ${determinarTipoContenido(i)}
-                Descripción del contenido: ${descripcionContenido}
 
                 Pregunta: ${r.pregunta}
                 Respuesta del estudiante: ${r.respuesta}
@@ -196,13 +174,16 @@ async function mostrarRespuesta(container, idGeneral) {
                     id: r.id_respuesta,
                     pregunta: r.pregunta,
                     respuesta: r.respuesta,
-                    analisis: evaluacion,
                     puntaje: extractScore(evaluacion)
                 });
             } else {
                 throw new Error('Respuesta de la API no válida');
             }
         }
+
+        const end = performance.now();
+        const duration = (end - start) / respuestas.length;
+        console.log(`Tiempo promedio de inferencia para gpt-3.5-turbo: ${duration}ms`);
 
         renderEvaluaciones(container, evaluaciones);
     } catch (error) {
@@ -212,13 +193,10 @@ async function mostrarRespuesta(container, idGeneral) {
 }
 
 async function mostrarRespuestaEntrenado(container, idGeneral) {
+    const start = performance.now();
     try {
         const respuestas = await fetch(`/obtener-respuestas-general/${idGeneral}`).then(res => res.json());
         const evaluaciones = [];
-
-        const descripcionImagen = "En la imagen se ve una mano que emerge del agua en señal de auxilio, mientras un grupo de personas alrededor está grabando con sus teléfonos móviles en lugar de ayudar.";
-        const descripcionVideo = "El video muestra la primera parte de la película 'Tiempos Modernos' de Charlie Chaplin, específicamente hasta el minuto 1:40.";
-        const descripcionTexto = "Extracto de la novela 'Eva Luna' de Isabel Allende: La primera vez que vi la lluvia fue una tarde de verano en un patio interior...";
 
         for (let i = 0; i < respuestas.length; i++) {
             const r = respuestas[i];
@@ -227,15 +205,6 @@ async function mostrarRespuestaEntrenado(container, idGeneral) {
             if (!habilidad) {
                 console.error(`No se pudo determinar la habilidad para la pregunta: ${r.pregunta}`);
                 continue;
-            }
-
-            let descripcionContenido;
-            if (i < 5) {
-                descripcionContenido = descripcionImagen;
-            } else if (i < 10) {
-                descripcionContenido = descripcionVideo;
-            } else {
-                descripcionContenido = descripcionTexto;
             }
 
             if (!rubricas[habilidad]) {
@@ -249,13 +218,10 @@ async function mostrarRespuestaEntrenado(container, idGeneral) {
                 Rúbrica:
                 ${rubricas[habilidad]}
 
-                Tipo de contenido: ${determinarTipoContenido(i)}
-                Descripción del contenido: ${descripcionContenido}
-
                 Pregunta: ${r.pregunta}
                 Respuesta del estudiante: ${r.respuesta}
 
-                Utilizando la rúbrica proporcionada, analiza la respuesta del estudiante y asigna un puntaje en el rango de 0 a 3. El análisis debe comenzar con el puntaje asignado en el formato "Puntaje: X puntos" donde X es el puntaje que asignaste. Explica brevemente por qué asignaste ese puntaje, mencionando elementos específicos de la respuesta y la rúbrica.
+                Utilizando la rúbrica proporcionada, analiza la respuesta del estudiante y asigna un puntaje en el rango de 0 a 2. El análisis debe comenzar con el puntaje asignado en el formato "Puntaje: X puntos" donde X es el puntaje que asignaste. Explica brevemente por qué asignaste ese puntaje, mencionando elementos específicos de la respuesta y la rúbrica.
 
                 Recuerda ser detallado y justificado en tu evaluación.
             `;
@@ -269,13 +235,18 @@ async function mostrarRespuestaEntrenado(container, idGeneral) {
                     id: r.id_respuesta,
                     pregunta: r.pregunta,
                     respuesta: r.respuesta,
-                    analisis: evaluacion,
                     puntaje: extractScore(evaluacion)
                 });
             } else {
                 throw new Error('Respuesta de la API no válida');
             }
         }
+
+        const end = performance.now();
+        const
+
+ duration = (end - start) / respuestas.length;
+        console.log(`Tiempo promedio de inferencia para modelo fine-tuned: ${duration}ms`);
 
         renderEvaluaciones(container, evaluaciones);
     } catch (error) {
@@ -284,22 +255,22 @@ async function mostrarRespuestaEntrenado(container, idGeneral) {
     }
 }
 
-function determinarTipoContenido(index) {
-    if (index < 5) return "Imagen";
-    else if (index < 10) return "Video";
-    else return "Texto";
-}
-
 function extractScore(evaluacion) {
     const scoreRegex = /Puntaje: (\d+)/i;
     const match = evaluacion.match(scoreRegex);
-    return match ? match[1] : 'N/A';
+    return match ? parseInt(match[1]) : 0;
 }
 
 function downloadTableAsXLSX() {
     const table = document.querySelector('.table-auto');
     const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
     XLSX.writeFile(wb, 'analisis_respuestas.xlsx');
+
+    const puntajes = Array.from(table.querySelectorAll('tbody tr td:last-child')).map(td => parseInt(td.textContent) || 0);
+    const sumaPuntajes = puntajes.reduce((acc, curr) => acc + curr, 0);
+
+    const sumaContainer = document.getElementById('suma-puntajes');
+    sumaContainer.textContent = `Suma total del puntaje: ${sumaPuntajes}`;
 }
 
 function renderEvaluaciones(container, evaluaciones) {
@@ -308,7 +279,6 @@ function renderEvaluaciones(container, evaluaciones) {
             <td>${index + 1}</td>
             <td>${eval.pregunta}</td>
             <td>${eval.respuesta}</td>
-            <td>${eval.analisis}</td>
             <td>${eval.puntaje}</td>
         </tr>
     `).join('');
@@ -321,7 +291,6 @@ function renderEvaluaciones(container, evaluaciones) {
                         <th class="px-4 py-2">N</th>
                         <th class="px-4 py-2">Pregunta</th>
                         <th class="px-4 py-2">Respuesta</th>
-                        <th class="px-4 py-2">Análisis de ChatGPT</th>
                         <th class="px-4 py-2">Puntaje</th>
                     </tr>
                 </thead>
@@ -330,10 +299,10 @@ function renderEvaluaciones(container, evaluaciones) {
                 </tbody>
             </table>
             <button id="downloadBtn" class="download-btn">Descargar XLSX</button>
+            <div id="suma-puntajes" class="suma-puntajes"></div>
         </div>
     `;
 
-    // Añadir el event listener para el botón de descarga
     const downloadBtn = document.getElementById('downloadBtn');
     if (downloadBtn) {
         downloadBtn.addEventListener('click', downloadTableAsXLSX);
